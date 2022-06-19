@@ -1,0 +1,13 @@
+-r base.txt
+
+psycopg2==2.9.3
+flake8==4.0.1
+black==21.12b0
+
+pytest-django==4.5.2
+
+pytest-factoryboy==2.1.0
+
+Faker==11.3.0
+
+pytest-cov==3.0.0
