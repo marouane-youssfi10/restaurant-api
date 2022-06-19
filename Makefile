@@ -6,6 +6,7 @@ help:
 	@echo "    make bash: 		  Bash into application container"
 	@echo "    make ps:			  list containers/services"
 	@echo "	   make restart:      restart (removes all services and restart them -- without rebuilding)"
+	@echo "    make shell_plus:   access shell"
 	@echo "	   make build:		  build (usually, requires to build when changes happen to the Dockerfile or docker-compose.yml)"
 	@echo "    make bash: 		  open bash console in the app service"
 	@echo "    make test: 		  run application unit tests"
@@ -50,6 +51,12 @@ collectstatic:
 
 superuser:
 	docker compose -f local.yml run --rm api python3 manage.py createsuperuser
+
+test:
+	docker-compose -f local.yml run --rm api pytest
+
+shell:
+	docker compose -f local.yml run --rm api python manage.py shell
 
 restart:
 	make rm && make up

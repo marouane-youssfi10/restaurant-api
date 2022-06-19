@@ -10,8 +10,6 @@ APPS_DIR = ROOT_DIR / "core_apps"
 
 DEBUG = env.bool("DJANGO_DEBUG", False)
 
-ALLOWED_HOSTS = []
-
 
 # Application definition
 DJANGO_APPS = [
@@ -127,7 +125,6 @@ STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 ]
 
-
 MEDIA_URL = "/mediafiles/"
 MEDIA_ROOT = str(ROOT_DIR / "mediafiles")
 
@@ -136,6 +133,7 @@ MEDIA_ROOT = str(ROOT_DIR / "mediafiles")
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# AUTH_USER_MODEL = "users.User"
 
 LOGGING = {
     "version": 1,
