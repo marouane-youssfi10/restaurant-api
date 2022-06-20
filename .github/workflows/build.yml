@@ -21,8 +21,8 @@ jobs:
           install: true
           driver: docker
 
-      - name: create .envs-local/.local/.django.env
-        run: touch .envs-local/.local/.django.env
+      - name: create .envs-local/.local/django.env
+        run: touch .envs-local/.local/django.env
 
       - name: Build
         run: docker compose -f local.yml up -d
