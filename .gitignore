@@ -6,7 +6,7 @@ staticfiles
 .envs-local/*
 .envs-local/
 /.envs-local
-!..envs-local/.local/
+!.envs-local/.local/
 /envs-local/.local/
 
 ### Python ###
