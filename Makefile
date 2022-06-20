@@ -14,7 +14,7 @@ help:
 
 
 lint:
-	docker-compose -f local.yml run --rm api pre-commit run --all-files
+	pre-commit run --all-files
 
 build:
 	docker compose -f local.yml up --build -d --remove-orphans
