@@ -22,7 +22,7 @@ jobs:
           driver: docker
 
       - name: create .envs-local
-        run: touch .envs-local/.local/.django.env
+        run: touch docker-compose.local.env
 
       - name: Build
         run: docker compose -f local.yml up -d
