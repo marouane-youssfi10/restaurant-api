@@ -32,8 +32,8 @@ services:
       - local_postgres_data:/var/lib/postgresql/data
       - local_postgres_data_backups:/backups
     env_file:
-      - ./.envs-local/.local/.postgres
       - ./.envs/.local/.postgres
+      - ./.envs-local/.local/.postgres
     networks:
       - restauration-api
 
