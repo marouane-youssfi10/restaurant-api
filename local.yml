@@ -14,8 +14,8 @@ services:
     ports:
       - "8000:8000"
     env_file:
-      - docker-compose.env
-      - docker-compose.local.env
+      - docker.env
+      - docker.local.env
     depends_on:
       - postgres
     networks:
@@ -26,10 +26,6 @@ services:
       context: .
       dockerfile: ./docker/local/postgres/Dockerfile
     container_name: postgres
-    environment:
-      - POSTGRES_PASSWORD=root
-      - POSTGRES_USER=postgres
-      - POSTGRES_DB=restauration
     volumes:
       - local_postgres_data:/var/lib/postgresql/data
       - local_postgres_data_backups:/backups
