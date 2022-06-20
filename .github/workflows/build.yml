@@ -27,8 +27,8 @@ jobs:
       - name: Build
         run: docker compose -f local.yml up -d
 
-      - name: Test Code Linter
-        run: make lint
+      # - name: Test Code Linter
+      #  run: make lint
 
       - name: Run test suite
         run: make test
