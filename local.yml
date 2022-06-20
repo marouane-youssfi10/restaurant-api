@@ -14,10 +14,10 @@ services:
     ports:
       - "8000:8000"
     env_file:
-      - ./.envs-local/.local/.django
       - ./.envs/.local/.django
-      - ./.envs-local/.local/.postgres
       - ./.envs/.local/.postgres
+      - ./.envs-local/.local/.django
+      - ./.envs-local/.local/.postgres
     depends_on:
       - postgres
     networks:
