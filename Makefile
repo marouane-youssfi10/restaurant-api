@@ -55,6 +55,9 @@ superuser:
 test:
 	docker-compose -f local.yml run --rm api pytest
 
+clear_database:
+	docker-compose -f local.yml down --rmi all --volumes
+
 shell:
 	docker compose -f local.yml run --rm api python manage.py shell
 
