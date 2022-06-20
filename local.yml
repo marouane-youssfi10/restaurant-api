@@ -26,13 +26,13 @@ services:
       context: .
       dockerfile: ./docker/local/postgres/Dockerfile
     container_name: postgres
-    environment:
-      - POSTGRES_PASSWORD=root
-      - POSTGRES_USER=postgres
-      - POSTGRES_DB=restauration
     volumes:
       - local_postgres_data:/var/lib/postgresql/data
       - local_postgres_data_backups:/backups
+    tmpfs:
+      - /var/lib/postgresql/data
+    ports:
+      - "5432:5432"
     networks:
       - restauration-api
 
