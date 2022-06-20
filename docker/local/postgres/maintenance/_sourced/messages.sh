@@ -27,7 +27,7 @@ message_info()
 {
    echo -e "\e[37mINFO\e[0m: ${@}"
 }
- 
+
 message_suggestion()
 {
    echo -e "\e[33mSUGGESTION\e[0m: ${@}"

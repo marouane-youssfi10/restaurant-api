@@ -1,10 +1,10 @@
-from .base import *
+from .base import *  # noqa 401
 from .base import env
 
 DEBUG = True
 
 SECRET_KEY = env(
-    'DJANGO_SECRET_KEY',
+    "DJANGO_SECRET_KEY",
     default="VoQE5G62Qu1Sk8cmBMa8V8D4nYhWazjaEoH9p9wWGPF4Pv23A3M68Wtme2BpHSwt",
 )
 

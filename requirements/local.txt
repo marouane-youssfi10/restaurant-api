@@ -3,6 +3,7 @@
 psycopg2==2.9.3
 flake8==4.0.1
 black==21.12b0
+pre-commit==2.15.0
 argh==0.26.2
 PyYAML==6.0
 watchdog==2.1.6
