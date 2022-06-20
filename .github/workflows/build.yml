@@ -22,10 +22,10 @@ jobs:
           driver: docker
 
       - name: create docker-compose.local.env
-        run: touch docker-compose.local.env
+        run: touch .envs-local/.local/.django
 
       - name: Build
-        run: docker compose -f local.yml up
+        run: docker compose -f local.yml up -d
 
       - name: Test Code Linter
         run: make lint

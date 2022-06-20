@@ -3,11 +3,6 @@
 .coverage*
 .DS_Store
 staticfiles
-.envs/*
-.envs/
-/.envs
-!.envs/.local/
-/envs/.local/
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
