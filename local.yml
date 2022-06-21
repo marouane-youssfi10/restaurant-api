@@ -17,7 +17,6 @@ services:
       - django.env
       - postgres.env
       - django-local.env
-      - postgres-local.env
     depends_on:
       - postgres
     networks:
@@ -38,7 +37,6 @@ services:
       - local_postgres_data_backups:/backups
     env_file:
       - postgres.env
-      - postgres-local.env
     ports:
       - "5432:5432"
     networks:
