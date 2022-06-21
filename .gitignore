@@ -3,9 +3,9 @@
 .coverage*
 .DS_Store
 staticfiles
-docker.local.env
-docker.local.env/*
-/docker.local.env
+.envs-local
+.envs-local/*
+/.envs-local
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
