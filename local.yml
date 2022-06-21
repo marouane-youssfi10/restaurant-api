@@ -17,7 +17,6 @@ services:
       - django.env
       - postgres.env
       - django-local.env
-      - postgres-local.env
     depends_on:
       - postgres
     networks:
@@ -28,17 +27,11 @@ services:
       context: .
       dockerfile: ./docker/local/postgres/Dockerfile
     container_name: postgres
-    environment:
-      - POSTGRES_HOST=postgres
-      - POSTGRES_NAME=restauration
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=root
     volumes:
       - local_postgres_data:/var/lib/postgresql/data
       - local_postgres_data_backups:/backups
     env_file:
       - postgres.env
-      - postgres-local.env
     ports:
       - "5432:5432"
     networks:
