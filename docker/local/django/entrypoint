@@ -27,6 +27,6 @@ until postgres_ready; do
 >&2 echo "----------- Waiting for PostgreSQL to become available -----------"
 sleep 2
 done
->&2 echo "--------------------- PostgreSQL is ready!!!! --------------------dd"
+>&2 echo "--------------------- PostgreSQL is ready!!!! --------------------"
 
 exec "$@"

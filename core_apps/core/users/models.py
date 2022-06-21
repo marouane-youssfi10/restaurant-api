@@ -1,4 +1,5 @@
 import uuid
+import typing
 
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
@@ -33,12 +34,12 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name = _("user")
         verbose_name_plural = _("users")
 
-    def __str__(self):
+    def __str__(self) -> typing.Text:
         return self.username
 
     @property
-    def get_full_name(self):
-        return f"{self.first_name.title()} {self.last_name.title()}"
+    def get_full_name(self) -> typing.Text:
+        return f"{self.first_name} {self.last_name}"
 
-    def get_short_name(self):
+    def get_short_name(self) -> typing.Text:
         return self.first_name
