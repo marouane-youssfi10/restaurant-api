@@ -3,9 +3,12 @@
 .coverage*
 .DS_Store
 staticfiles
-.envs-local
-.envs-local/*
-/.envs-local
+django-local.env
+django-local.env/*
+/django-local.env
+postgres-local.env
+postgres-local.env/*
+/postgres-local.env
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
