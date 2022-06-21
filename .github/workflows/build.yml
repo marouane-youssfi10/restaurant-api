@@ -21,8 +21,11 @@ jobs:
           install: true
           driver: docker
 
-      - name: create docker.local.env
-        run: touch docker.local.env
+      - name: create docker.local-django
+        run: touch .envs-local/.local/django.env
+
+      - name: create docker.local-postgres
+        run: touch .envs-local/.local/postgres.env
 
       - name: Build
         run: docker compose -f local.yml up -d

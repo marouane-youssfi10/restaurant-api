@@ -14,8 +14,8 @@ services:
     ports:
       - "8000:8000"
     env_file:
-      - docker.env
-      - docker.local.env
+      - .envs-local/.local/django.env
+      - .envs-local/.local/postgres.env
     depends_on:
       - postgres
     networks:
@@ -29,6 +29,8 @@ services:
     volumes:
       - local_postgres_data:/var/lib/postgresql/data
       - local_postgres_data_backups:/backups
+    env_file:
+      - .envs-local/.local/postgres.env
     ports:
       - "5432:5432"
     networks:
