@@ -1,0 +1,37 @@
+name: Build & Test
+
+on:
+  push:
+    branches-ignore:
+      - 'master'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+        with:
+          install: true
+          driver: docker
+
+      - name: create django-local.env
+        run: touch django-local.env
+
+      - name: create postgres-local.env
+        run: touch postgres-local.env
+
+      - name: Build
+        run: docker compose -f local.yml up -d
+
+      # - name: Test Code Linter
+      #  run: make lint
+
+      - name: Run test suite
+        run: make test
