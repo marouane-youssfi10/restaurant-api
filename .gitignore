@@ -3,12 +3,16 @@
 .coverage*
 .DS_Store
 staticfiles
+
 django-local.env
 django-local.env/*
 /django-local.env
+./django-local.env
+
 postgres-local.env
 postgres-local.env/*
 /postgres-local.env
+./postgres-local.env
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
