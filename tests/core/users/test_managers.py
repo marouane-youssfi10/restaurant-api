@@ -8,6 +8,8 @@ from tests.core.users.factories import UserFactory
 @pytest.mark.django_db
 def test_user_manager__create():
     instance = UserFactory()
+    assert instance.first_name
+    assert instance.last_name
     assert instance.username
     assert instance.date_joined
 

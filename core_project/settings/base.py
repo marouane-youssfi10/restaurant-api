@@ -178,7 +178,7 @@ DJOSER = {
 # SMTP configuration
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
-EMAIL_HOST_USER = "ifssouy0010@gmail.com"
+EMAIL_HOST_USER = "ifssouy001@gmail.com"
 EMAIL_HOST_PASSWORD = "etaopyvbytddkszg"
 EMAIL_USE_TLS = True
 
