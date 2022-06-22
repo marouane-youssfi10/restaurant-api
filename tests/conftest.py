@@ -4,6 +4,8 @@ from django.conf import settings
 
 from tests.core.users.factories import UserFactory
 
+from rest_framework.test import APIClient
+
 
 @pytest.fixture
 def user() -> settings.AUTH_USER_MODEL:
@@ -13,6 +15,11 @@ def user() -> settings.AUTH_USER_MODEL:
 @pytest.fixture
 def superuser() -> settings.AUTH_USER_MODEL:
     return UserFactory(superuser=True)
+
+
+@pytest.fixture
+def api_client():
+    return APIClient()
 
 
 class CustomRequest(object):

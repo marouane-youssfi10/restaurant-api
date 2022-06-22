@@ -4,8 +4,7 @@ from django.conf import settings
 
 urlpatterns = [
     path(settings.ADMIN_URL, admin.site.urls),
-    path("api/auth/", include("djoser.urls")),
-    path("api/auth/", include("djoser.urls.jwt")),
+    path("api/", include("core_apps.apis.users.urls", namespace="user")),
 ]
 
 
