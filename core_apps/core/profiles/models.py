@@ -26,7 +26,9 @@ class Customer(TimeStampedUUIDModel):
     address = models.CharField(
         verbose_name=_("address"), max_length=100, null=True, blank=True
     )
-    country = CountryField(verbose_name=_("country"), blank=False, null=False)
+    country = CountryField(
+        verbose_name=_("country"), max_length=50, blank=False, null=False
+    )
     city = models.CharField(
         verbose_name=_("city"), max_length=50, blank=False, null=False
     )
