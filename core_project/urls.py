@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.urls import path, include
+from django.conf.urls.static import static
 from django.conf import settings
 
 urlpatterns = [
@@ -8,7 +9,7 @@ urlpatterns = [
     path("api/menu/", include("core_apps.apis.menu.urls", namespace="menu")),
     path("api/profile/", include("core_apps.apis.profiles.urls", namespace="profile")),
     path("api/orders/", include("core_apps.apis.orders.urls", namespace="order")),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
 admin.site.site_header = "Restaurant API Admin"
