@@ -4,6 +4,12 @@ from django.utils.translation import gettext_lazy as _
 from django_countries.fields import CountryField
 
 from core_apps.core.common.models import TimeStampedUUIDModel
+from core_apps.core.orders.managers import (
+    OrderManager,
+    AcceptedOrderManager,
+    CompletedOrderManager,
+    CancledOrderManager,
+)
 
 User = get_user_model()
 
@@ -43,15 +49,47 @@ class Order(TimeStampedUUIDModel):
     )
     order_total = models.FloatField(verbose_name=_("order total"))
     status = models.CharField(
-        verbose_name=_("order total"),
+        verbose_name=_("status"),
         max_length=10,
         choices=Gender.choices,
-        default="New",
+        default=Gender.NEW,
     )
-    is_ordered = models.BooleanField(verbose_name=_("is order"), default=False)
+    is_ordered = models.BooleanField(verbose_name=_("is ordered"), default=False)
+
+    objects = OrderManager()
 
     def __str__(self):
         return self.order_number
+
+
+class AcceptedOrder(Order):
+
+    objects = AcceptedOrderManager()
+
+    class Meta:
+        verbose_name = "Order accepted"
+        verbose_name_plural = "Orders accepted"
+        proxy = True
+
+
+class CompletedOrder(Order):
+
+    objects = CompletedOrderManager()
+
+    class Meta:
+        verbose_name = "Order completed"
+        verbose_name_plural = "Orders completed"
+        proxy = True
+
+
+class CancledOrder(Order):
+
+    objects = CancledOrderManager()
+
+    class Meta:
+        verbose_name = "Order cancled"
+        verbose_name_plural = "Orders cancled"
+        proxy = True
 
 
 class OrderItem(TimeStampedUUIDModel):
