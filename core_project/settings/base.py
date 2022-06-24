@@ -25,6 +25,7 @@ THIRD_PARTY_APPS = [
     "rest_framework",
     "djoser",
     "rest_framework_simplejwt",
+    "djcelery_email",
 ]
 
 LOCAL_APPS = [
@@ -176,6 +177,13 @@ DJOSER = {
         "user_delete": "djoser.serializers.UserDeleteSerializer",
     },
 }
+
+CELERY_BROKER_URL = env("CELERY_BROKER")
+CELERY_RESULT_URL = env("CELERY_BACKEND")
+CELERY_TIMEZON = "Africa/Meknes"
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
 
 # SMTP configuration
 EMAIL_HOST = "smtp.gmail.com"

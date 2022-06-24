@@ -1,0 +1,7 @@
+
+#!/bin/bash
+
+set -o errexit
+set -o nounset
+
+watchmedo auto-restart -d core_project/ -p '*.py' -- celery -A core_project worker --loglevel=info

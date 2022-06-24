@@ -11,14 +11,16 @@ services:
       - .:/app
       - static_volume:/app/staticfiles
       - media_volume:/app/mediafiles
-    ports:
-      - "8000:8000"
+    expose:
+      - "8000"
     env_file:
       - django.env
       - postgres.env
       - django-local.env
     depends_on:
       - postgres
+      - mailhog
+      - redis
     networks:
       - restauration-api
 
@@ -46,6 +48,72 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+
+  mailhog:
+    image: mailhog/mailhog:v1.0.0
+    container_name: mailhog
+    ports:
+      - "8025:8025"
+    networks:
+      - restauration-api
+
+  redis:
+    image: redis:6-alpine
+    container_name: redis_db
+    networks:
+      - restauration-api
+
+  celery_worker:
+    build:
+      context: .
+      dockerfile: ./docker/local/django/Dockerfile
+    command: /start-celeryworker
+    container_name: celery_worker
+    volumes:
+      - .:/app
+    env_file:
+      - postgres.env
+      - django-local.env
+    depends_on:
+      - redis
+      - postgres
+      - mailhog
+    networks:
+      - restauration-api
+
+  flower:
+    build:
+      context: .
+      dockerfile: ./docker/local/django/Dockerfile
+    command: /start-flower
+    container_name: flower
+    volumes:
+      - .:/app
+    env_file:
+      - postgres.env
+      - django-local.env
+    ports:
+      - "5555:5555"
+    depends_on:
+      - redis
+      - postgres
+    networks:
+      - restauration-api
+
+  nginx:
+    restart: always
+    depends_on:
+      - api
+    volumes:
+      - static_volume:/app/staticfiles
+      - media_volume:/app/mediafiles
+    build:
+      context: ./docker/local/nginx
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    networks:
+      - restauration-api
 
 networks:
     restauration-api:
