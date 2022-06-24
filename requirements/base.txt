@@ -2,6 +2,7 @@ django==3.2.11
 django-environ==0.8.1
 djangorestframework==3.12.4
 django-cors-headers==3.13.0
+django-autoslug==1.9.8
 django-countries==7.3.2
 django-phonenumber-field==5.2.0
 phonenumbers==8.12.33
