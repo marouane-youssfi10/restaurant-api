@@ -35,7 +35,7 @@ class Food(TimeStampedUUIDModel):
     description = models.TextField(
         verbose_name=_("description"), max_length=500, blank=True
     )
-    price = models.IntegerField()
+    price = models.IntegerField(blank=False, null=False)
     category = models.ForeignKey(
         Category, verbose_name=_("category"), on_delete=models.CASCADE
     )

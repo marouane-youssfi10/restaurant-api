@@ -12,12 +12,14 @@ class CustomerFactory(factory.django.DjangoModelFactory):
     address = Faker("address")
     country = Faker("country")
     city = Faker("city")
-    profile_photo = factory.LazyAttribute(
-        lambda _: ContentFile(
-            factory.django.ImageField()._make_data({"width": 1024, "height": 768}),
-            "example.jpg",
-        )
-    )
 
     class Meta:
         model = Customer
+
+    class Params:
+        profile_photo = factory.LazyAttribute(
+            lambda _: ContentFile(
+                factory.django.ImageField()._make_data({"width": 1024, "height": 768}),
+                "example.jpg",
+            )
+        )
