@@ -33,6 +33,7 @@ LOCAL_APPS = [
     "core_apps.core.profiles",
     "core_apps.core.orders",
     "core_apps.core.menu",
+    "core_apps.core.cart",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS

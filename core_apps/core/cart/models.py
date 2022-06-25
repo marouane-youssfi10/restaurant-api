@@ -10,8 +10,9 @@ User = get_user_model()
 
 class Cart(TimeStampedUUIDModel):
     user = models.ForeignKey(
-        User, verbose_name=_("user", related_name="cart", on_delete=models.CASCADE)
+        User, verbose_name=_("user"), related_name="cart", on_delete=models.CASCADE
     )
+
     food = models.ForeignKey(
         Food, verbose_name=_("food"), related_name="foods", on_delete=models.CASCADE
     )
