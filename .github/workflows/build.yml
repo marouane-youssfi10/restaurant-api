@@ -24,9 +24,6 @@ jobs:
       - name: create django-local.env
         run: touch django-local.env
 
-      - name: create postgres-local.env
-        run: touch postgres-local.env
-
       - name: Build
         run: docker compose -f local.yml up -d
 
