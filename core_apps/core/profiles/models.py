@@ -32,7 +32,7 @@ class Customer(TimeStampedUUIDModel):
     city = models.CharField(
         verbose_name=_("city"), max_length=50, blank=False, null=False
     )
-    profile_photo = models.ImageField(verbose_name=_("profile photo"))
+    profile_photo = models.ImageField(verbose_name=_("profile photo"), blank=True)
 
     def __str__(self):
         return f"{self.user.username}"
