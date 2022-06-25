@@ -24,7 +24,7 @@ def test_order_admin__save_model(client):
 @pytest.mark.django_db
 def test_order_items_admin__save_model(client):
     user = UserFactory(superuser=True)
-    order = OrderFactory()
+    order = OrderFactory(user=user)
     food = FoodFactory()
     order_item = OrderItemFactory.create(user=user, order=order, food=food)
     order_item_admin = OrderItemAdmin(model=OrderItem, admin_site=AdminSite())
