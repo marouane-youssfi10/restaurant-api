@@ -5,6 +5,7 @@ from django_countries.fields import CountryField
 from phonenumber_field.modelfields import PhoneNumberField
 
 from core_apps.core.common.models import TimeStampedUUIDModel
+from core_apps.core.profiles.managers import CustomerManager
 
 User = get_user_model()
 
@@ -33,6 +34,8 @@ class Customer(TimeStampedUUIDModel):
         verbose_name=_("city"), max_length=50, blank=False, null=False
     )
     profile_photo = models.ImageField(verbose_name=_("profile photo"), blank=True)
+
+    objects = CustomerManager()
 
     def __str__(self):
         return f"{self.user.username}"
