@@ -89,7 +89,7 @@ def test_order_admin__delete(superuser, client):
 def test_order_items_admin__create(superuser, client):
     client.force_login(superuser)
     user = UserFactory()
-    order = OrderFactory()
+    order = OrderFactory(user=user)
     food = FoodFactory()
     order_item = OrderItemFactory(user=user, order=order, food=food)
     response = client.post(
@@ -114,7 +114,7 @@ def test_order_items_admin__create(superuser, client):
 def test_order_item_admin__change(superuser, client):
     client.force_login(superuser)
     user = UserFactory()
-    order = OrderFactory()
+    order = OrderFactory(user=user)
     food = FoodFactory()
     order_item = OrderItemFactory(order=order, user=user, food=food)
     response = client.post(
@@ -135,7 +135,8 @@ def test_order_item_admin__change(superuser, client):
 @pytest.mark.django_db
 def test_order_item_admin__delete(superuser, client):
     client.force_login(superuser)
-    order = OrderFactory()
+    user = UserFactory()
+    order = OrderFactory(user=user)
     response = client.post(
         f"/admin/orders/order/{order.pkid}/delete/",
     )
