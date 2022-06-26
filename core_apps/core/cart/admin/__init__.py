@@ -1,0 +1,15 @@
+from django.contrib import admin
+from core_apps.core.cart.models import Cart
+
+# class FoodInline(admin.TabularInline):
+#     model = Food
+
+
+@admin.register(Cart)
+class CartAdmin(admin.ModelAdmin):
+    list_display = ["pkid", "user", "food", "quantity"]
+    list_filter = ["created_at", "user"]
+    search_fields = ["user"]
+    list_editable = ["quantity"]
+    raw_id_fields = ["user"]
+    # inlines=[FoodInline,]
