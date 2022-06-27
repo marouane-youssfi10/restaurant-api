@@ -22,7 +22,6 @@ class payment(models.Model):
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="user_payment"
     )
-
     method = models.CharField(
         verbose_name=_("Method payment"),
         choices=PaymentMethods.choices,
