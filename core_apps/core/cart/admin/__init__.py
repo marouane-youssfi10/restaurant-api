@@ -5,7 +5,6 @@ from core_apps.core.cart.models import Cart
 #     model = Food
 
 
-@admin.register(Cart)
 class CartAdmin(admin.ModelAdmin):
     list_display = ["pkid", "user", "food", "quantity"]
     list_filter = ["created_at", "user"]
@@ -13,3 +12,6 @@ class CartAdmin(admin.ModelAdmin):
     list_editable = ["quantity"]
     raw_id_fields = ["user"]
     # inlines=[FoodInline,]
+
+
+admin.site.register(Cart)
