@@ -1,15 +1,14 @@
-import uuid
-
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from core_apps.core.common.models import TimeStampedUUIDModel
 from core_apps.core.payments.managers import PaymentManager
 
 User = get_user_model()
 
 
-class Payment(models.Model):
+class Payment(TimeStampedUUIDModel):
     class PaymentMethods(models.TextChoices):
         paypal = "paypal", _("paypal")
         stripe = "stripe", _("stripe")
@@ -18,7 +17,6 @@ class Payment(models.Model):
         SUCCESSFUL = "successful", _("successful")
         FAILED = "failed", _("failed")
 
-    payment_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="user_payment"
     )
@@ -41,4 +39,4 @@ class Payment(models.Model):
     objects = PaymentManager()
 
     def __str__(self):
-        return f"{self.user.username}'s payment"
+        return f"{self.method}"

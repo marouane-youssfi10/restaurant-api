@@ -4,14 +4,12 @@ from rest_framework import status
 
 from core_apps.core.payments.admin import PaymentAdmin
 from core_apps.core.payments.models import Payment
-from tests.core.users.factories import UserFactory
 from tests.core.payments.factories import PaymentFactory
 
 
 @pytest.mark.django_db
-def test_payment_admin__save_model(client):
-    user = UserFactory(superuser=True)
-    payment = PaymentFactory.create(user=user)
+def test_payment_admin__save_model(client, superuser):
+    payment = PaymentFactory.create(user=superuser)
     payment_admin = PaymentAdmin(model=Payment, admin_site=AdminSite())
     payment_admin.save_model(obj=payment, request=None, form=None, change=None)
     assert payment_admin.has_add_permission(payment) == True
@@ -27,7 +25,6 @@ def test_payment_admin__create(superuser, client):
         "/admin/payments/payment/add/",
         {
             "user": payment.user,
-            "payment_id": payment.payment_id,
             "method": payment.method,
             "amount_paid": payment.amount_paid,
             "status": payment.status,
@@ -48,7 +45,6 @@ def test_payment_admin__change(superuser, client):
         f"/admin/payments/payment/{payment.id}/change/",
         {
             "user": payment.user,
-            "payment_id": payment.payment_id,
             "method": payment.method,
             "amount_paid": payment.amount_paid,
             "status": payment.status,
@@ -63,6 +59,6 @@ def test_payment_admin__delete(superuser, client):
     client.force_login(superuser)
     payment = PaymentFactory()
     response = client.post(
-        f"/admin/payments/payment/{payment.id}/delete/",
+        f"/admin/payments/payment/{payment.pkid}/delete/",
     )
     assert response.status_code == status.HTTP_200_OK

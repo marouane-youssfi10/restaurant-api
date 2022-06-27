@@ -18,6 +18,7 @@ class OrderAdmin(admin.ModelAdmin):
     list_display = [
         "pkid",
         "user",
+        "payment",
         "order_number",
         "address",
         "country",
@@ -108,6 +109,7 @@ class OrderItemAdmin(admin.ModelAdmin):
         "pkid",
         "user",
         "order",
+        "payment",
         "quantity",
         "food_price",
         "ordered",
