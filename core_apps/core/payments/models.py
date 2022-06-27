@@ -14,7 +14,7 @@ class payment(models.Model):
         paypal = "paypal", _("paypal")
         stripe = "stripe", _("stripe")
 
-    class Statuses(models.TextChoices):
+    class Status(models.TextChoices):
         SUCCESSFUL = "successful"
         FAILED = "failed"
 
@@ -32,7 +32,7 @@ class payment(models.Model):
     amount_paid = models.CharField(max_length=100)
     status = models.CharField(
         verbose_name=_("Method payment"),
-        choices=PaymentMethods.choices,
+        choices=Status.choices,
         max_length=20,
         null=False,
         blank=False,
