@@ -9,6 +9,11 @@ from core_apps.core.orders.models import (
 )
 
 
+class OrderInline(admin.TabularInline):
+    model = OrderItem
+    extra = 2
+
+
 class OrderAdmin(admin.ModelAdmin):
     list_display = [
         "pkid",
@@ -23,6 +28,7 @@ class OrderAdmin(admin.ModelAdmin):
     ]
     list_display_links = ["pkid", "user", "order_number"]
     search_fields = ["user"]
+    inlines = [OrderInline]
 
     class Meta:
         model = Order
