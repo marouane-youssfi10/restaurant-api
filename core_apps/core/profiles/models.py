@@ -28,10 +28,10 @@ class Customer(TimeStampedUUIDModel):
         verbose_name=_("address"), max_length=100, null=True, blank=True
     )
     country = CountryField(
-        verbose_name=_("country"), max_length=50, blank=False, null=False
+        verbose_name=_("country"), max_length=100, blank=False, null=False
     )
     city = models.CharField(
-        verbose_name=_("city"), max_length=50, blank=False, null=False
+        verbose_name=_("city"), max_length=100, blank=False, null=False
     )
     profile_photo = models.ImageField(verbose_name=_("profile photo"), blank=True)
 
