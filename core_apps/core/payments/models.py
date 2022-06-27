@@ -41,4 +41,4 @@ class Payment(models.Model):
     objects = PaymentManager()
 
     def __str__(self):
-        return f"{self.user.username}'s payment"
+        return f"{self.method}"

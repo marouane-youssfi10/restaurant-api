@@ -29,14 +29,14 @@ class Order(TimeStampedUUIDModel):
         blank=False,
         null=False,
     )
-    # payment = models.ForeignKey(
-    #     "payment.Payment",
-    #     verbose_name=_("payment"),
-    #     related_name="payment_order",
-    #     on_delete=models.SET_NULL,
-    #     blank=True,
-    #     null=True
-    # )
+    payment = models.ForeignKey(
+        "payments.Payment",
+        verbose_name=_("payment"),
+        related_name="payment_order",
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+    )
     order_number = models.CharField(
         verbose_name=_("order number"), max_length=20, blank=False, null=False
     )
@@ -107,14 +107,14 @@ class OrderItem(TimeStampedUUIDModel):
         blank=False,
         null=False,
     )
-    # payment = models.ForeignKey(
-    #     "payment.Payment",
-    #     verbose_name=_("payment"),
-    #     related_name="payment_order_item",
-    #     on_delete=models.SET_NULL,
-    #     blank=True,
-    #     null=True
-    # )
+    payment = models.ForeignKey(
+        "payments.Payment",
+        verbose_name=_("payment"),
+        related_name="payment_orderitem",
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+    )
     order = models.ForeignKey(
         Order,
         verbose_name=_("order"),
