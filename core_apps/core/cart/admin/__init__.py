@@ -14,4 +14,4 @@ class CartAdmin(admin.ModelAdmin):
     # inlines=[FoodInline,]
 
 
-admin.site.register(Cart)
+admin.site.register(Cart, CartAdmin)

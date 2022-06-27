@@ -9,14 +9,14 @@ from core_apps.core.payments.managers import PaymentManager
 User = get_user_model()
 
 
-class payment(models.Model):
+class Payment(models.Model):
     class PaymentMethods(models.TextChoices):
         paypal = "paypal", _("paypal")
         stripe = "stripe", _("stripe")
 
     class Status(models.TextChoices):
-        SUCCESSFUL = "successful"
-        FAILED = "failed"
+        SUCCESSFUL = "successful", _("successful")
+        FAILED = "failed", _("failed")
 
     payment_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     user = models.ForeignKey(

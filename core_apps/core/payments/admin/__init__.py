@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from core_apps.core.payments.models import payment
+from core_apps.core.payments.models import Payment
 
 
 class PaymentAdmin(admin.ModelAdmin):
@@ -16,4 +16,4 @@ class PaymentAdmin(admin.ModelAdmin):
     list_filter = ["method"]
 
 
-admin.site.register(payment, PaymentAdmin)
+admin.site.register(Payment, PaymentAdmin)
