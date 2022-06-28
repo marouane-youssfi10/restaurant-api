@@ -23,7 +23,7 @@
 - model: profiles.customer
   pk: 3
   fields:
-    user: 2
+    user: 3
     gender: 'male'
     phone_number: '+2126124706501'
     address: 'Street 3'
