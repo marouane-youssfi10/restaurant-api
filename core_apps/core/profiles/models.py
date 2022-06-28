@@ -33,7 +33,6 @@ class Customer(TimeStampedUUIDModel):
     city = models.CharField(
         verbose_name=_("city"), max_length=100, blank=False, null=False
     )
-    profile_photo = models.ImageField(verbose_name=_("profile photo"), blank=True)
 
     objects = CustomerManager()
 
