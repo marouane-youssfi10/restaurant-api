@@ -30,6 +30,9 @@ class CustomerView(
     serializer_class = CustomersSerializer
     renderer_classes = (CustomerJSONRenderer,)
 
+    def get_object(self):
+        return self.request.user
+
     def retrieve(self, request, *args, **kwargs):
         return super().retrieve(request, *args, **kwargs)
 
