@@ -8,7 +8,7 @@ urlpatterns = [
     path(settings.ADMIN_URL, admin.site.urls),
     path("api/", include("core_apps.apis.users.urls", namespace="user")),
     path("api/menu/", include("core_apps.apis.menu.urls", namespace="menu")),
-    path("api/profile/", include("core_apps.apis.profiles.urls", namespace="profile")),
+    path("api/profiles/", include("core_apps.apis.profiles.urls", namespace="profile")),
     path("api/orders/", include("core_apps.apis.orders.urls", namespace="order")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
