@@ -2,6 +2,11 @@ import pytest
 
 
 @pytest.mark.django_db
+def test_order(food):
+    assert food.id
+
+
+@pytest.mark.django_db
 def test_order(order):
     assert order.id
     assert order.user
