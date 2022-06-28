@@ -1,0 +1,18 @@
+- model: menu.category
+  pk: 1
+  fields:
+    category_name: 'drinks'
+    slug: 'drinks'
+    description: ''
+    category_image:
+    created_at: 2022-06-28 09:23:40.317646+00:00
+    updated_at: 2022-06-28 09:23:40.317646+00:00
+- model: menu.category
+  pk: 2
+  fields:
+    category_name: 'sandwiches'
+    slug: 'sandwiches'
+    description : ''
+    category_image:
+    created_at: 2022-06-28 09:23:40.317646+00:00
+    updated_at: 2022-06-28 09:23:40.317646+00:00

@@ -1,0 +1,42 @@
+- model: users.user
+  pk: 1
+  fields:
+    username: 'marouane_youssfi'
+    email: 'marouane@gmail.com'
+    password: argon2$argon2i$v=19$m=512,t=2,p=2$cEpMSXU5RUg5UlRQ$vuNU+3Y0ceMbcATgEq/y9g
+    first_name: 'marouane'
+    last_name: 'youssfi'
+    is_superuser: true
+    is_staff: true
+    is_active: true
+    date_joined: 2022-06-28 09:23:40.317646+00:00
+    groups: []
+    user_permissions: []
+- model: users.user
+  pk: 2
+  fields:
+    username: 'driss_lharratene'
+    email: 'driss@gmail.com'
+    password: argon2$argon2i$v=19$m=512,t=2,p=2$cEpMSXU5RUg5UlRQ$vuNU+3Y0ceMbcATgEq/y9g
+    first_name: 'driss'
+    last_name: 'lharratene'
+    is_superuser: true
+    is_staff: true
+    is_active: true
+    date_joined: 2022-06-28 09:23:40.317646+00:00
+    groups: []
+    user_permissions: []
+- model: users.user
+  pk: 3
+  fields:
+    username: 'brahim_boughanm'
+    email: 'brahim@gmail.com'
+    password: argon2$argon2i$v=19$m=512,t=2,p=2$cEpMSXU5RUg5UlRQ$vuNU+3Y0ceMbcATgEq/y9g
+    first_name: 'brahim'
+    last_name: 'boughanm'
+    is_superuser: true
+    is_staff: true
+    is_active: true
+    date_joined: 2022-06-28 09:23:40.317646+00:00
+    groups: []
+    user_permissions: []
