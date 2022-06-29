@@ -20,3 +20,6 @@ class Cart(TimeStampedUUIDModel):
 
     def __str__(self):
         return f"{self.user.username}'s - cart"
+
+    def sub_total(self):
+        return self.food.price * self.quantity
