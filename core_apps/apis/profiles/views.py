@@ -1,5 +1,9 @@
+import logging
+
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import mixins, viewsets, permissions
+from rest_framework.exceptions import NotFound
 
 from core_apps.apis.profiles.paginations import CustomersPagination
 from core_apps.apis.profiles.renderers import (
@@ -10,6 +14,8 @@ from core_apps.apis.profiles.serializers import CustomersSerializer
 from core_apps.core.profiles.models import Customer
 
 User = get_user_model()
+
+logger = logging.getLogger(__name__)
 
 
 class CustomersView(mixins.ListModelMixin, viewsets.GenericViewSet):
@@ -34,6 +40,12 @@ class CustomerView(
         return self.request.user
 
     def retrieve(self, request, *args, **kwargs):
+        try:
+            User.object.get(user=self.get_object())
+        except ObjectDoesNotExist:
+            logger.info("A Customer profile with this user does not exist")
+            raise NotFound("A Customer profile with this user does not exist")
+
         return super().retrieve(request, *args, **kwargs)
 
     def partial_update(self, request, *args, **kwargs):
