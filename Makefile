@@ -20,40 +20,40 @@ lint_without_docker:
 	pre-commit run --all-files
 
 build:
-	docker compose -f local.yml up --build -d --remove-orphans
+	docker-compose -f local.yml up --build -d --remove-orphans
 
 up:
-	docker compose -f local.yml up
+	docker-compose -f local.yml up
 
 upd:
-	docker compose -f local.yml up -d
+	docker-compose -f local.yml up -d
 
 rm:
-	docker compose -f local.yml down && docker compose -f local.yml rm -f
+	docker-compose -f local.yml down && docker compose -f local.yml rm -f
 
 down:
-	docker compose -f local.yml down
+	docker-compose -f local.yml down
 
 ps:
 	docker-compose ps
 
 bash:
-	docker compose f local.yml run --rm api bash
+	docker-compose f local.yml run --rm api bash
 
 show_logs:
-	docker compose -f local.yml logs
+	docker-compose -f local.yml logs
 
 migrate:
-	docker compose -f local.yml run --rm api python3 manage.py migrate
+	docker-compose -f local.yml run --rm api python3 manage.py migrate
 
 migrations:
-	docker compose -f local.yml run --rm api python3 manage.py makemigrations
+	docker-compose -f local.yml run --rm api python3 manage.py makemigrations
 
 collectstatic:
-	docker compose -f local.yml run --rm api python3 manage.py collectstatic --no-input --clear
+	docker-compose -f local.yml run --rm api python3 manage.py collectstatic --no-input --clear
 
 superuser:
-	docker compose -f local.yml run --rm api python3 manage.py createsuperuser
+	docker-compose -f local.yml run --rm api python3 manage.py createsuperuser
 
 test:
 	docker-compose -f local.yml run --rm api pytest
@@ -65,13 +65,13 @@ clear_database:
 	docker-compose -f local.yml down --rmi all --volumes
 
 shell:
-	docker compose -f local.yml run --rm api python manage.py shell
+	docker-compose -f local.yml run --rm api python manage.py shell
 
 restart:
 	make rm && make up
 
 flake8:
-	docker compose -f local.yml exec api flake8 .
+	docker-compose -f local.yml exec api flake8 .
 
 black:
-	docker compose -f local.yml exec api black --exclude=migrations .
+	docker-compose -f local.yml exec api black --exclude=migrations .
