@@ -8,6 +8,10 @@ logger = logging.getLogger(__name__)
 
 
 class CategorySerializer(serializers.ModelSerializer):
+    get_category_image = serializers.SerializerMethodField(read_only=True)
+    created_at = serializers.SerializerMethodField(read_only=True)
+    updated_at = serializers.SerializerMethodField(read_only=True)
+
     class Meta:
         model = Category
         fields = (
@@ -39,6 +43,10 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class FoodSerializer(serializers.ModelSerializer):
+    category_info = serializers.SerializerMethodField(read_only=True)
+    created_at = serializers.SerializerMethodField(read_only=True)
+    updated_at = serializers.SerializerMethodField(read_only=True)
+
     class Meta:
         model = Food
         fields = (
@@ -47,18 +55,18 @@ class FoodSerializer(serializers.ModelSerializer):
             "slug",
             "description",
             "price",
+            "category_info",
             "created_at",
             "updated_at",
-            "category",
         )
 
-    def get_category(self, obj):
+    def get_category_info(self, obj):
         return {
-            "pkid": obj.category.pkid,
+            "id": obj.category.id,
             "category_name": obj.category.category_name,
             "slug": obj.category.slug,
             "description": obj.category.description,
-            "category_image": obj.category.category_image,
+            # "category_image": obj.category.category_image,
         }
 
     def get_created_at(self, obj):
@@ -77,18 +85,26 @@ class FoodSerializer(serializers.ModelSerializer):
 
 
 class FoodGallerySerializer(serializers.ModelSerializer):
+    food_images = serializers.SerializerMethodField(read_only=True)
+    food_info = serializers.SerializerMethodField(read_only=True)
+    created_at = serializers.SerializerMethodField(read_only=True)
+    updated_at = serializers.SerializerMethodField(read_only=True)
+
     class Meta:
         model = FoodGallery
-        fields = ("id", "food_images", "created_at", "updated_at", "food")
+        fields = ("id", "food_images", "created_at", "updated_at", "food_info")
 
-    def get_food(self, obj):
+    def get_food_info(self, obj):
         return {
-            "pkid": obj.food.pkid,
+            "id": obj.food.id,
             "food_name": obj.food.food_name,
             "slug": obj.food.slug,
             "description": obj.food.description,
             "price": obj.food.price,
         }
+
+    def get_food_images(self, obj):
+        return obj.food_images.url
 
     def get_created_at(self, obj):
         now = obj.created_at
@@ -106,6 +122,11 @@ class FoodGallerySerializer(serializers.ModelSerializer):
 
 
 class ReviewRatingSerializer(serializers.ModelSerializer):
+    food_info = serializers.SerializerMethodField(read_only=True)
+    user_info = serializers.SerializerMethodField(read_only=True)
+    created_at = serializers.SerializerMethodField(read_only=True)
+    updated_at = serializers.SerializerMethodField(read_only=True)
+
     class Meta:
         model = ReviewRating
         fields = (
@@ -115,10 +136,10 @@ class ReviewRatingSerializer(serializers.ModelSerializer):
             "created_at",
             "updated_at",
             "user_info",
-            "food",
+            "food_info",
         )
 
-    def get_food(self, obj):
+    def get_food_info(self, obj):
         return {
             "pkid": obj.food.pkid,
             "food_name": obj.food.food_name,
@@ -129,7 +150,7 @@ class ReviewRatingSerializer(serializers.ModelSerializer):
 
     def get_user_info(self, obj):
         return {
-            "pkid": obj.user.pkid,
+            "id": obj.user.id,
             "username": obj.user.username,
             "first_name": obj.user.first_name,
             "last_name": obj.user.last_name,

@@ -5,6 +5,12 @@ from django.utils.translation import gettext_lazy as _
 from django.core.validators import MaxValueValidator, MinValueValidator
 
 from core_apps.core.common.models import TimeStampedUUIDModel
+from core_apps.core.menu.managers import (
+    CategoryManager,
+    FoodManager,
+    FoodGalleryManager,
+    ReviewRatingManager,
+)
 
 User = get_user_model()
 
@@ -23,6 +29,8 @@ class Category(TimeStampedUUIDModel):
     )
     category_image = models.ImageField(upload_to="photos/categories", blank=True)
 
+    objects = CategoryManager()
+
     def __str__(self):
         return self.category_name
 
@@ -40,6 +48,8 @@ class Food(TimeStampedUUIDModel):
         Category, verbose_name=_("category"), on_delete=models.CASCADE
     )
 
+    objects = FoodManager()
+
     def __str__(self):
         return self.food_name
 
@@ -54,6 +64,8 @@ class FoodGallery(TimeStampedUUIDModel):
     food_images = models.ImageField(
         verbose_name=_("food images"), upload_to="photos/foods", blank=True
     )
+
+    objects = FoodGalleryManager()
 
     def __str__(self):
         return f"{self.food} gallery"
@@ -78,6 +90,8 @@ class ReviewRating(TimeStampedUUIDModel):
         default=0,
         validators=[MinValueValidator(0), MaxValueValidator(5)],
     )
+
+    objects = ReviewRatingManager()
 
     def __str__(self):
         return f"{self.user.username} review"

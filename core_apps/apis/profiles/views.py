@@ -18,9 +18,12 @@ User = get_user_model()
 logger = logging.getLogger(__name__)
 
 
-class CustomersView(mixins.ListModelMixin, viewsets.GenericViewSet):
+class MyCustomMixin(object):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = CustomersSerializer
+
+
+class CustomersView(MyCustomMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
     queryset = Customer.objects.all()
     renderer_classes = (CustomersJSONRenderer,)
     pagination_class = CustomersPagination
@@ -30,10 +33,11 @@ class CustomersView(mixins.ListModelMixin, viewsets.GenericViewSet):
 
 
 class CustomerView(
-    mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet
+    MyCustomMixin,
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    viewsets.GenericViewSet,
 ):
-    permission_classes = [permissions.IsAuthenticated]
-    serializer_class = CustomersSerializer
     renderer_classes = (CustomerJSONRenderer,)
 
     def get_object(self):
