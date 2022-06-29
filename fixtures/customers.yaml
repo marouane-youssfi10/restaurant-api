@@ -5,8 +5,8 @@
     gender: 'male'
     phone_number: '+212615776531'
     address: 'Street 1'
-    country: "Morocco"
-    city: "meknes"
+    country: 'Morocco'
+    city: 'meknes'
     created_at: 2022-06-28 09:23:40.317646+00:00
     updated_at: 2022-06-28 09:23:40.317646+00:00
 - model: profiles.customer
@@ -16,8 +16,8 @@
     gender: 'male'
     phone_number: '+212695736792'
     address: 'Street 2'
-    country: "Morocco"
-    city: "fes"
+    country: 'Morocco'
+    city: 'fes'
     created_at: 2022-06-28 09:23:40.317646+00:00
     updated_at: 2022-06-28 09:23:40.317646+00:00
 - model: profiles.customer
@@ -27,7 +27,7 @@
     gender: 'male'
     phone_number: '+2126124706501'
     address: 'Street 3'
-    country: "Morocco"
-    city: "sidi ifni"
+    country: 'Morocco'
+    city: 'sidi ifni'
     created_at: 2022-06-28 09:23:40.317646+00:00
     updated_at: 2022-06-28 09:23:40.317646+00:00
