@@ -58,6 +58,9 @@ superuser:
 test:
 	docker-compose -f local.yml run --rm api pytest
 
+test_report:
+	docker-compose -f local.yml run --rm api pytest -p no:warnings --cov=. --cov-report html
+
 test_with_printing_messages:
 	docker-compose -f local.yml run --rm api pytest -rP
 
