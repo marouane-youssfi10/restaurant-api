@@ -1,13 +1,12 @@
 from django.urls import path, include
+from rest_framework.routers import DefaultRouter
 
-from core_apps.apis.profiles.views import CustomersView, CustomerView
-from core_apps.utils.drf_routers import CustomRouter
+from core_apps.apis.profiles.views import CustomersView
 
 app_name = "customers"
 
-router = CustomRouter(trailing_slash=False)
-router.register(r"all", CustomersView, basename="profiles")
-router.register(r"me", CustomerView, basename="profile")
+router = DefaultRouter()
+router.register(r"", CustomersView, basename="profiles")
 
 
 urlpatterns = [
