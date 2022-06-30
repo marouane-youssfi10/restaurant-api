@@ -31,7 +31,6 @@ class CustomersSerializer(serializers.ModelSerializer):
         return f"{first_name} {last_name}"
 
     def get_created_at(self, obj):
-        print("\nobj.created_at = ", obj.created_at, "\n")
         now = obj.created_at
         formatted_date = now.strftime("%m/%d/%Y, %H:%M:%S")
         return formatted_date
