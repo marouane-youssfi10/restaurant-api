@@ -7,6 +7,6 @@ from rest_framework import status
 def test_cartitem_listing(api_client, user):
     api_client.force_authenticate(user)
     url = reverse("carts:cartitems-list")
-    assert url == "/api/carts/cartitems"
+    assert url == "/api/carts/cartitems/"
     response = api_client.get(url)
     assert response.status_code == status.HTTP_200_OK, response.content

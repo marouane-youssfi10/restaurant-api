@@ -8,7 +8,7 @@ from core_apps.core.cart.models import Cart
 @pytest.mark.django_db
 def test_cart__create(api_client, user, food):
     url = reverse("carts:cartitems-list")
-    assert url == "/api/carts/cartitems"
+    assert url == "/api/carts/cartitems/"
     api_client.force_authenticate(user)
     response = api_client.post(
         url,
