@@ -7,6 +7,6 @@ from rest_framework import status
 def test_food_listing(api_client, user):
     api_client.force_authenticate(user)
     url = reverse("menu:categories-list")
-    assert url == "/api/menu/categories"
+    assert url == "/api/menu/categories/"
     response = api_client.get(url)
     assert response.status_code == status.HTTP_200_OK, response.content

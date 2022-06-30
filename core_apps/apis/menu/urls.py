@@ -1,4 +1,5 @@
 from django.urls import path, include
+from rest_framework.routers import DefaultRouter
 
 from core_apps.apis.menu.views import (
     CategoryView,
@@ -6,11 +7,10 @@ from core_apps.apis.menu.views import (
     FoodGalleryView,
     ReviewRatingView,
 )
-from core_apps.utils.drf_routers import CustomRouter
 
 app_name = "menu"
 
-router = CustomRouter(trailing_slash=False)
+router = DefaultRouter()
 router.register(r"categories", CategoryView, basename="categories")
 router.register(r"foods", FoodView, basename="foods")
 router.register(r"food-gallery", FoodGalleryView, basename="food-gallery")
