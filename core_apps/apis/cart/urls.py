@@ -1,11 +1,11 @@
 from django.urls import path, include
+from rest_framework.routers import DefaultRouter
 
 from core_apps.apis.cart.views import CartView
-from core_apps.utils.drf_routers import CustomRouter
 
 app_name = "carts"
 
-router = CustomRouter(trailing_slash=False)
+router = DefaultRouter()
 router.register(r"cartitems", CartView, basename="cartitems")
 
 urlpatterns = [
