@@ -31,6 +31,10 @@ class Category(TimeStampedUUIDModel):
 
     objects = CategoryManager()
 
+    class Meta:
+        verbose_name = "category"
+        verbose_name_plural = "categories"
+
     def __str__(self):
         return self.category_name
 
@@ -67,6 +71,10 @@ class FoodGallery(TimeStampedUUIDModel):
 
     objects = FoodGalleryManager()
 
+    class Meta:
+        verbose_name = "food gallery"
+        verbose_name_plural = "food galleries"
+
     def __str__(self):
         return f"{self.food} gallery"
 
@@ -92,6 +100,10 @@ class ReviewRating(TimeStampedUUIDModel):
     )
 
     objects = ReviewRatingManager()
+
+    class Meta:
+        verbose_name = "review rating"
+        verbose_name_plural = "reviews rating"
 
     def __str__(self):
         return f"{self.user.username} review"
