@@ -1,9 +1,9 @@
 import logging
 
 from django_countries.serializer_fields import CountryField
-from django.utils.translation import gettext as _
-from rest_framework import serializers, status
+from rest_framework import serializers
 
+from core_apps.apis.orders.exceptions import CartItemEmpty
 from core_apps.core.cart.models import Cart
 from core_apps.core.orders.models import Order
 from core_apps.core.orders.utils import generate_order_number
@@ -61,12 +61,8 @@ class OrderSerializer(serializers.ModelSerializer):
         carts = Cart.objects.filter(user=attrs["user"])
         cart_count = carts.count()
         if cart_count <= 0:
-            raise serializers.ValidationError(
-                {
-                    "status": status.HTTP_400_BAD_REQUEST,
-                    "detail": _("You must have one food in your cartitem at least"),
-                }
-            )
+            raise CartItemEmpty
+
         return attrs
 
     def create(self, validated_data):

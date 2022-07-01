@@ -13,7 +13,7 @@ class PaymentAdmin(admin.ModelAdmin):
         "status",
     ]
     list_display_links = ["id", "pkid", "user"]
-    list_filter = ["method"]
+    list_filter = ["method", "status"]
 
 
 admin.site.register(Payment, PaymentAdmin)
