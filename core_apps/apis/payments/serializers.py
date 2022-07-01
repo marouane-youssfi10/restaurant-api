@@ -2,7 +2,7 @@ import logging
 
 from rest_framework import serializers
 
-from core_apps.apis.payments.exceptions import OrdersNotFound, OrderNumberDoesNotExist
+from core_apps.apis.payments.exceptions import OrderNumberDoesNotExist
 from core_apps.core.cart.models import Cart
 from core_apps.core.orders.models import OrderItem, Order
 from core_apps.core.payments.models import Payment
@@ -69,9 +69,6 @@ class PaymentSerializer(serializers.ModelSerializer):
         Cart.objects.filter(user=user).delete()
 
     def validate(self, attrs):
-        if not Order.objects.filter(user=attrs["user"], is_ordered=False).exists():
-            raise OrdersNotFound
-
         order_number = self._order_number(attrs["user"])
         if not Order.objects.filter(
             user=attrs["user"], is_ordered=False, order_number=order_number
