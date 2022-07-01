@@ -57,7 +57,7 @@ class PaymentSerializer(serializers.ModelSerializer):
 
         # Store transaction details inside Payment model
         order, amount_paid = self._order_total_user(user)
-        payment = Payment(
+        payment = Payment.objects.create(
             user=user, method=method, amount_paid=amount_paid, status=status
         )
         payment.save()
