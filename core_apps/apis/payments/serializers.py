@@ -1,8 +1,8 @@
 import logging
 
-from django.utils.translation import gettext as _
-from rest_framework import serializers, status
+from rest_framework import serializers
 
+from core_apps.apis.payments.exceptions import OrdersNotFound, OrderNumberDoesNotExist
 from core_apps.core.cart.models import Cart
 from core_apps.core.orders.models import OrderItem, Order
 from core_apps.core.payments.models import Payment
@@ -70,35 +70,24 @@ class PaymentSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         if not Order.objects.filter(user=attrs["user"], is_ordered=False).exists():
-            raise serializers.ValidationError(
-                {
-                    "status": status.HTTP_404_NOT_FOUND,
-                    "detail": _("Order not Found"),
-                }
-            )
+            raise OrdersNotFound
 
         order_number = self._order_number(attrs["user"])
         if not Order.objects.filter(
             user=attrs["user"], is_ordered=False, order_number=order_number
         ).exists():
-            raise serializers.ValidationError(
-                {
-                    "status": status.HTTP_404_NOT_FOUND,
-                    "detail": _("Order with this number does not exists"),
-                }
-            )
+            raise OrderNumberDoesNotExist
 
         return attrs
 
     def create(self, validated_data):
-        user = validated_data["user"]
-        method = validated_data["method"]
-        status = validated_data["status"]
-
         # Store transaction details inside Payment model
-        order, amount_paid = self._order_total_user(user)
+        order, amount_paid = self._order_total_user(validated_data["user"])
         payment = Payment.objects.create(
-            user=user, method=method, amount_paid=amount_paid, status=status
+            user=validated_data["user"],
+            method=validated_data["method"],
+            amount_paid=amount_paid,
+            status=validated_data["status"],
         )
         payment.save()
 
@@ -109,6 +98,6 @@ class PaymentSerializer(serializers.ModelSerializer):
         order.save()
 
         # Move the cart items to OrderItem table
-        self._save_to_order_items(user, order, payment)
+        self._save_to_order_items(validated_data["user"], order, payment)
 
         return payment
