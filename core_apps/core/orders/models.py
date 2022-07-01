@@ -38,7 +38,7 @@ class Order(TimeStampedUUIDModel):
         null=True,
     )
     order_number = models.CharField(
-        verbose_name=_("order number"), max_length=20, blank=False, null=False
+        verbose_name=_("order number"), max_length=50, blank=True, null=True
     )
     address = models.CharField(
         verbose_name=_("address"), max_length=100, blank=False, null=False
@@ -53,7 +53,7 @@ class Order(TimeStampedUUIDModel):
         verbose_name=_("order note"), max_length=100, blank=True, null=True
     )
     order_total = models.FloatField(
-        verbose_name=_("order total"), max_length=100, blank=False, null=False
+        verbose_name=_("order total"), max_length=100, blank=True, null=True
     )
     status = models.CharField(
         verbose_name=_("status"),
@@ -66,7 +66,7 @@ class Order(TimeStampedUUIDModel):
     objects = OrderManager()
 
     def __str__(self):
-        return self.order_number
+        return str(self.order_number)
 
 
 class AcceptedOrder(Order):
