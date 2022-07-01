@@ -1,6 +1,7 @@
 import logging
 
-from rest_framework import serializers
+from django.utils.translation import gettext as _
+from rest_framework import serializers, status
 
 from core_apps.core.cart.models import Cart
 from core_apps.core.orders.models import OrderItem, Order
@@ -50,6 +51,45 @@ class PaymentSerializer(serializers.ModelSerializer):
         )
         return order, order.order_total
 
+    def _save_to_order_items(self, user, order, payment):
+        cart_items = Cart.objects.filter(user=user)
+        for item in cart_items:
+            order_item = OrderItem.objects.create(
+                user=order.user,
+                payment=payment,
+                order=order,
+                food=item.food,
+                quantity=item.quantity,
+                food_price=item.food.price,
+                ordered=True,
+            )
+            order_item.save()
+
+        # Clear cart
+        Cart.objects.filter(user=user).delete()
+
+    def validate(self, attrs):
+        if not Order.objects.filter(user=attrs["user"], is_ordered=False).exists():
+            raise serializers.ValidationError(
+                {
+                    "status": status.HTTP_404_NOT_FOUND,
+                    "detail": _("Order not Found"),
+                }
+            )
+
+        order_number = self._order_number(attrs["user"])
+        if not Order.objects.filter(
+            user=attrs["user"], is_ordered=False, order_number=order_number
+        ).exists():
+            raise serializers.ValidationError(
+                {
+                    "status": status.HTTP_404_NOT_FOUND,
+                    "detail": _("Order with this number does not exists"),
+                }
+            )
+
+        return attrs
+
     def create(self, validated_data):
         user = validated_data["user"]
         method = validated_data["method"]
@@ -69,20 +109,6 @@ class PaymentSerializer(serializers.ModelSerializer):
         order.save()
 
         # Move the cart items to OrderItem table
-        cart_items = Cart.objects.filter(user=user)
-        for item in cart_items:
-            order_item = OrderItem.objects.create(
-                user=order.user,
-                payment=payment,
-                order=order,
-                food=item.food,
-                quantity=item.quantity,
-                food_price=item.food.price,
-                ordered=True,
-            )
-            order_item.save()
-
-        # Clear cart
-        Cart.objects.filter(user=user).delete()
+        self._save_to_order_items(user, order, payment)
 
         return payment

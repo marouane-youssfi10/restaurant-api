@@ -48,30 +48,32 @@ class OrderSerializer(serializers.ModelSerializer):
         data = super().to_representation(instance)
         return data
 
-    def create(self, validated_data):
-        user = validated_data["user"]
-        # get all carts user
+    def _all_foods_prices(self, user):
         carts = Cart.objects.filter(user=user)
+        # get all total price of foods
+        total = 0
+        for cart in carts:
+            total += cart.sub_total()
 
-        # check the cart user if empty
+        return total
+
+    def validate(self, attrs):
+        carts = Cart.objects.filter(user=attrs["user"])
         cart_count = carts.count()
         if cart_count <= 0:
-            logger.info(f"there's no foods in carts")
             raise serializers.ValidationError(
                 {
                     "status": status.HTTP_400_BAD_REQUEST,
                     "detail": _("You must have one food in your cartitem at least"),
                 }
             )
+        return attrs
 
-        # get all total price of foods
-        total = 0
-        for cart in carts:
-            total += cart.sub_total()
-
+    def create(self, validated_data):
+        total_price = self._all_foods_prices(validated_data["user"])
         # save the order
         order = Order.objects.create(**validated_data)
         order.order_number = generate_order_number()
-        order.order_total = total
+        order.order_total = total_price
         order.save()
         return order
