@@ -71,7 +71,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
         # save the order
         order = Order.objects.create(**validated_data)
-        order.order_number = generate_order_number(user)
+        order.order_number = generate_order_number()
         order.order_total = total
         order.save()
         return order

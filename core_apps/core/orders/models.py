@@ -9,6 +9,7 @@ from core_apps.core.orders.managers import (
     AcceptedOrderManager,
     CompletedOrderManager,
     CancledOrderManager,
+    OrderItemManager,
 )
 
 User = get_user_model()
@@ -136,6 +137,8 @@ class OrderItem(TimeStampedUUIDModel):
         verbose_name=_("food price"), blank=False, null=False
     )
     ordered = models.BooleanField(verbose_name=_("ordered"), default=False)
+
+    objects = OrderItemManager()
 
     def __str__(self):
         return f"{self.user.username} - {self.order}"

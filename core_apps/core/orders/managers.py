@@ -33,3 +33,7 @@ class CompletedOrderManager(OrderManager):
 class CancledOrderManager(OrderManager):
     def all_order_cancled(self):
         return self.get_queryset().filter(status="cancled")
+
+
+class OrderItemManager(models.Manager):
+    pass
