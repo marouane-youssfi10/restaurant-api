@@ -72,4 +72,5 @@ class OrderSerializer(serializers.ModelSerializer):
         order.order_number = generate_order_number()
         order.order_total = total_price
         order.save()
+
         return order

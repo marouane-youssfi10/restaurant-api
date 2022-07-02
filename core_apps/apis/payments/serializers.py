@@ -3,8 +3,7 @@ import logging
 from rest_framework import serializers
 
 from core_apps.apis.payments.exceptions import OrderNumberDoesNotExist
-from core_apps.core.cart.models import Cart
-from core_apps.core.orders.models import OrderItem, Order
+from core_apps.core.orders.models import Order
 from core_apps.core.payments.models import Payment
 
 logger = logging.getLogger(__name__)
@@ -51,23 +50,6 @@ class PaymentSerializer(serializers.ModelSerializer):
         )
         return order, order.order_total
 
-    def _save_to_order_items(self, user, order, payment):
-        cart_items = Cart.objects.filter(user=user)
-        for item in cart_items:
-            order_item = OrderItem.objects.create(
-                user=order.user,
-                payment=payment,
-                order=order,
-                food=item.food,
-                quantity=item.quantity,
-                food_price=item.food.price,
-                ordered=True,
-            )
-            order_item.save()
-
-        # Clear cart
-        Cart.objects.filter(user=user).delete()
-
     def validate(self, attrs):
         order_number = self._order_number(attrs["user"])
         if not Order.objects.filter(
@@ -87,14 +69,5 @@ class PaymentSerializer(serializers.ModelSerializer):
             status=validated_data["status"],
         )
         payment.save()
-
-        # update payment & status & is_ordered in order table
-        order.payment = payment
-        order.is_ordered = True
-        order.status = Order.Gender.ACCEPTED
-        order.save()
-
-        # Move the cart items to OrderItem table
-        self._save_to_order_items(validated_data["user"], order, payment)
 
         return payment
