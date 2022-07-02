@@ -8,7 +8,7 @@ from core_apps.core.payments.models import Payment
 @receiver(
     post_save, sender=Payment, dispatch_uid="update_order_payment_and_create_orderitem"
 )
-def update_order_payment_and_create_orderitem(sender, instance, created, **kwargs):
+def update_order_payment_and_create_orderitem(instance, created, **kwargs):
     if created:
         current_app.send_task(
             "core_apps.core.payments.tasks.update_order_payment_and_create_orderitem",

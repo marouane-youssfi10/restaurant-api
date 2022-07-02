@@ -16,9 +16,11 @@ logger = logging.getLogger(__name__)
     default_retry_delay=5,
     max_retries=5,
 )
-def update_order_payment_and_create_orderitem(pkid) -> None:
+def update_order_payment_and_create_orderitem(pkid):
     payment = Payment.objects.get(pkid=pkid)
-    order = Order.objects.last()
+    order = Order.objects.filter(status=Order.Gender.NEW, is_ordered=False).latest(
+        "created_at"
+    )
     order.payment = payment
     order.is_ordered = True
     order.status = Order.Gender.ACCEPTED
