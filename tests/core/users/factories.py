@@ -9,7 +9,7 @@ class UserFactory(factory.django.DjangoModelFactory):
     email = Faker("email")
     first_name = Faker("first_name")
     last_name = Faker("last_name")
-    username = Faker("first_name")
+    username = Faker("name")
     profile_photo = factory.LazyAttribute(
         lambda _: ContentFile(
             factory.django.ImageField()._make_data({"width": 1024, "height": 768}),
