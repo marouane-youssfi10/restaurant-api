@@ -11,6 +11,10 @@ from core_apps.core.payments.models import Payment
 def update_order_payment_and_create_orderitem(instance, created, **kwargs):
     if created:
         current_app.send_task(
-            "core_apps.core.payments.tasks.update_order_payment_and_create_orderitem",
+            "core_apps.core.payments.tasks.update_order_payment",
+            args=[instance.pkid],
+        )
+        current_app.send_task(
+            "core_apps.core.payments.tasks.create_orderitem",
             args=[instance.pkid],
         )
