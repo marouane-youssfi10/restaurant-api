@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 
 class CategorySerializer(serializers.ModelSerializer):
-    get_category_image = serializers.SerializerMethodField(read_only=True)
+    category_image = serializers.SerializerMethodField(read_only=True)
     created_at = serializers.SerializerMethodField(read_only=True)
     updated_at = serializers.SerializerMethodField(read_only=True)
 
@@ -25,7 +25,7 @@ class CategorySerializer(serializers.ModelSerializer):
         )
 
     def get_category_image(self, obj):
-        return obj.category_name.url
+        return obj.category_image.url
 
     def get_created_at(self, obj):
         now = obj.created_at
@@ -92,7 +92,14 @@ class FoodGallerySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = FoodGallery
-        fields = ("id", "food_images", "created_at", "updated_at", "food_info")
+        fields = (
+            "id",
+            "food_images",
+            "food_info",
+            "created_at",
+            "updated_at",
+            "food_info",
+        )
 
     def get_food_info(self, obj):
         return {

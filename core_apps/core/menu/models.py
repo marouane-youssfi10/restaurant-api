@@ -27,7 +27,9 @@ class Category(TimeStampedUUIDModel):
     description = models.TextField(
         verbose_name=_("description"), max_length=500, blank=True
     )
-    category_image = models.ImageField(upload_to="photos/categories", blank=True)
+    category_image = models.ImageField(
+        verbose_name=_("category image"), upload_to="photos/categories"
+    )
 
     objects = CategoryManager()
 
