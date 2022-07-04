@@ -14,6 +14,18 @@ class CategoryFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Category
 
+    class Params:
+        with_image = factory.Trait(
+            category_image=factory.LazyAttribute(
+                lambda _: ContentFile(
+                    factory.django.ImageField()._make_data(
+                        {"width": 1024, "height": 768}
+                    ),
+                    "category_image.jpg",
+                )
+            )
+        )
+
 
 class FoodFactory(factory.django.DjangoModelFactory):
     category = factory.SubFactory(CategoryFactory)
@@ -26,15 +38,21 @@ class FoodFactory(factory.django.DjangoModelFactory):
 
 class FoodGalleryFactory(factory.django.DjangoModelFactory):
     food = factory.SubFactory(FoodFactory)
-    food_images = factory.LazyAttribute(
-        lambda _: ContentFile(
-            factory.django.ImageField()._make_data({"width": 1024, "height": 768}),
-            "example.jpg",
-        )
-    )
 
     class Meta:
         model = FoodGallery
+
+    class Params:
+        with_image = factory.Trait(
+            food_images=factory.LazyAttribute(
+                lambda _: ContentFile(
+                    factory.django.ImageField()._make_data(
+                        {"width": 1024, "height": 768}
+                    ),
+                    "food_image.jpg",
+                )
+            )
+        )
 
 
 class ReviewRatingFactory(factory.django.DjangoModelFactory):

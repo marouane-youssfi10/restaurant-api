@@ -43,11 +43,6 @@ class Category(TimeStampedUUIDModel):
     def __str__(self):
         return self.category_name
 
-    def my_category_image(self):
-        if self.category_image:
-            return self.category_image.url
-        return ""
-
 
 class Food(TimeStampedUUIDModel):
     food_name = models.CharField(
