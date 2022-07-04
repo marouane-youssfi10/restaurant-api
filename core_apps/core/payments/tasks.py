@@ -21,10 +21,7 @@ def update_order_payment(pkid):
     order = Order.objects.filter(
         user=payment.user, status=Order.Gender.NEW, is_ordered=False
     ).latest("created_at")
-    order.payment = payment
-    order.is_ordered = True
-    order.status = Order.Gender.ACCEPTED
-    order.save()
+    Order.objects.update_order_payment_and_status(order, payment)
 
 
 @shared_task(
