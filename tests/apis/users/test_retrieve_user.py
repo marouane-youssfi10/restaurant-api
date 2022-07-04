@@ -4,8 +4,8 @@ from rest_framework import status
 
 
 @pytest.mark.django_db
-def test_retrieve_user(api_client, user):
-    api_client.force_authenticate(user)
+def test_retrieve_user(api_client, superuser, user):
+    api_client.force_authenticate(superuser)
     response = api_client.get(
         reverse(
             "user:user-detail",
@@ -16,3 +16,4 @@ def test_retrieve_user(api_client, user):
     )
     assert reverse("user:user-detail", args=["me"]) == "/api/users/me/"
     assert response.status_code == status.HTTP_200_OK, response.content
+    assert response.json()["admin"] == True

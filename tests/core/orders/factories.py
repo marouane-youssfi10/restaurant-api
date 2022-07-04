@@ -21,11 +21,14 @@ class OrderFactory(factory.django.DjangoModelFactory):
         model = Order
 
     class Params:
-        with_address_country_city = factory.Trait(
-            status=Order.Gender.NEW, is_ordered=False
+        with_status_accepted = factory.Trait(
+            status=Order.Gender.ACCEPTED, is_ordered=True
         )
-        with_status_and_is_ordered = factory.Trait(
-            status=Order.Gender.NEW, is_ordered=False
+        with_status_completed = factory.Trait(
+            status=Order.Gender.COMPLETED, is_ordered=True
+        )
+        with_status_cancled = factory.Trait(
+            status=Order.Gender.CANCLED, is_ordered=False
         )
 
 
