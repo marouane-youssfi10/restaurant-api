@@ -19,10 +19,14 @@ class OrderManager(models.Manager):
     def all_new_orders(self):
         return self.get_queryset().filter(status="new")
 
-    def update_order_payment_and_status(self, order, payment):
+    def update_order_payment_and_set_status_to_accpeted(self, order, payment):
         order.payment = payment
         order.is_ordered = True
         order.status = Order.Gender.ACCEPTED
+        order.save()
+
+    def set_order_status_to_cancled(self, order):
+        order.status = Order.Gender.CANCLED
         order.save()
 
 

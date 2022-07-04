@@ -21,7 +21,7 @@ def update_order_payment(pkid):
     order = Order.objects.filter(
         user=payment.user, status=Order.Gender.NEW, is_ordered=False
     ).latest("created_at")
-    Order.objects.update_order_payment_and_status(order, payment)
+    Order.objects.update_order_payment_and_set_status_to_accpeted(order, payment)
 
 
 @shared_task(
