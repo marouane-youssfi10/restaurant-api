@@ -27,7 +27,10 @@ class FoodAdmin(admin.ModelAdmin):
 
 class FoodGalleryAdmin(admin.ModelAdmin):
     def thumbnail(self, obj):
-        return format_html('<img src="{}" width="150">'.format(obj.food_images.url))
+        try:
+            return format_html('<img src="{}" width="150">'.format(obj.food_images.url))
+        except:
+            pass
 
     list_display = [
         "pkid",
@@ -35,6 +38,7 @@ class FoodGalleryAdmin(admin.ModelAdmin):
         "thumbnail",
     ]
     list_display_links = ["pkid", "food"]
+    thumbnail.short_description = "Food picture"
 
 
 class ReviewRatingAdmin(admin.ModelAdmin):

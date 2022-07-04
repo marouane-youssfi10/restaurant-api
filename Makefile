@@ -38,7 +38,7 @@ ps:
 	docker-compose ps
 
 bash:
-	docker-compose f local.yml run --rm api bash
+	docker-compose -f local.yml run --rm api bash
 
 show_logs:
 	docker-compose -f local.yml logs

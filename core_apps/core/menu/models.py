@@ -28,7 +28,10 @@ class Category(TimeStampedUUIDModel):
         verbose_name=_("description"), max_length=500, blank=True
     )
     category_image = models.ImageField(
-        verbose_name=_("category image"), upload_to="photos/categories"
+        verbose_name=_("category image"),
+        upload_to="photos/categories/",
+        blank=True,
+        null=True,
     )
 
     objects = CategoryManager()
@@ -39,6 +42,11 @@ class Category(TimeStampedUUIDModel):
 
     def __str__(self):
         return self.category_name
+
+    def my_category_image(self):
+        if self.category_image:
+            return self.category_image.url
+        return ""
 
 
 class Food(TimeStampedUUIDModel):
@@ -68,7 +76,7 @@ class FoodGallery(TimeStampedUUIDModel):
         on_delete=models.CASCADE,
     )
     food_images = models.ImageField(
-        verbose_name=_("food images"), upload_to="photos/foods", blank=True
+        verbose_name=_("food images"), upload_to="photos/foods/", blank=True
     )
 
     objects = FoodGalleryManager()
