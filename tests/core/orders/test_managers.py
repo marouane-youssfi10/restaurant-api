@@ -75,12 +75,12 @@ def test_order_admin_with_status_cancled__create(superuser, client):
 
 
 @pytest.mark.django_db
-def test_set_order_to_delivered(order):
+def test_update_order_payment_and_set_status_to_accepted(order):
     Order.objects.update_order_payment_and_set_status_to_accpeted(order, order.payment)
     assert order.status == Order.Statues.ACCEPTED
 
 
 @pytest.mark.django_db
-def test_set_order_to_delivered(order):
+def test_set_order_status_to_cancled(order):
     Order.objects.set_order_status_to_cancled(order)
     assert order.status == Order.Statues.CANCLED
