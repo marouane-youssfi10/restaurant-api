@@ -26,6 +26,8 @@ class OrderAdmin(admin.ModelAdmin):
         "order_total",
         "status",
         "is_ordered",
+        "created_at",
+        "updated_at",
     ]
     list_display_links = ["pkid", "user", "order_number"]
     search_fields = ["user"]

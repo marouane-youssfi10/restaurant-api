@@ -11,6 +11,7 @@ class PaymentAdmin(admin.ModelAdmin):
         "method",
         "amount_paid",
         "status",
+        "created_at",
     ]
     list_display_links = ["id", "pkid", "user"]
     list_filter = ["method", "status"]

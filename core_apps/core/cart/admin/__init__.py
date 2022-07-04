@@ -6,7 +6,15 @@ from core_apps.core.cart.models import Cart
 
 
 class CartAdmin(admin.ModelAdmin):
-    list_display = ["pkid", "user", "food", "quantity", "sub_total"]
+    list_display = [
+        "pkid",
+        "user",
+        "food",
+        "quantity",
+        "sub_total",
+        "created_at",
+        "updated_at",
+    ]
     list_filter = ["created_at", "user"]
     search_fields = ["user"]
     list_editable = ["quantity"]

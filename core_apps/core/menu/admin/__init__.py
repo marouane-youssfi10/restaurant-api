@@ -20,6 +20,8 @@ class FoodAdmin(admin.ModelAdmin):
         "slug",
         "price",
         "category",
+        "created_at",
+        "updated_at",
     ]
     list_display_links = ["pkid", "food_name"]
     search_fields = ["food_name"]
@@ -36,6 +38,8 @@ class FoodGalleryAdmin(admin.ModelAdmin):
         "pkid",
         "food",
         "thumbnail",
+        "created_at",
+        "updated_at",
     ]
     list_display_links = ["pkid", "food"]
     thumbnail.short_description = "Food picture"
@@ -48,6 +52,8 @@ class ReviewRatingAdmin(admin.ModelAdmin):
         "food",
         "review",
         "rating",
+        "created_at",
+        "updated_at",
     ]
     list_display_links = ["pkid", "user"]
     search_fields = ["user"]
