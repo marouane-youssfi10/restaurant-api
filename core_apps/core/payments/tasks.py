@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 def update_order_payment(pkid):
     payment = Payment.objects.get(pkid=pkid)
     order = Order.objects.filter(
-        user=payment.user, status=Order.Gender.NEW, is_ordered=False
+        user=payment.user, status=Order.Statues.NEW, is_ordered=False
     ).latest("created_at")
     Order.objects.update_order_payment_and_set_status_to_accpeted(order, payment)
 
@@ -34,7 +34,7 @@ def create_orderitem(pkid):
     payment = Payment.objects.get(pkid=pkid)
     cart_items = Cart.objects.filter(user=payment.user)
     order = Order.objects.filter(
-        user=payment.user, status=Order.Gender.ACCEPTED, is_ordered=True
+        user=payment.user, status=Order.Statues.ACCEPTED, is_ordered=True
     ).latest("created_at")
     for item in cart_items:
         order_item = OrderItem.objects.create(

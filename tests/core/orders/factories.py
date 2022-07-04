@@ -22,13 +22,13 @@ class OrderFactory(factory.django.DjangoModelFactory):
 
     class Params:
         with_status_accepted = factory.Trait(
-            status=Order.Gender.ACCEPTED, is_ordered=True
+            status=Order.Statues.ACCEPTED, is_ordered=True
         )
         with_status_completed = factory.Trait(
-            status=Order.Gender.COMPLETED, is_ordered=True
+            status=Order.Statues.COMPLETED, is_ordered=True
         )
         with_status_cancled = factory.Trait(
-            status=Order.Gender.CANCLED, is_ordered=False
+            status=Order.Statues.CANCLED, is_ordered=False
         )
 
 

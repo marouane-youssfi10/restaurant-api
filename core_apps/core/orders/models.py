@@ -16,7 +16,7 @@ User = get_user_model()
 
 
 class Order(TimeStampedUUIDModel):
-    class Gender(models.TextChoices):
+    class Statues(models.TextChoices):
         NEW = "new", _("new")
         ACCEPTED = "accepted", _("accepted")
         COMPLETED = "completed", _("completed,")
@@ -59,8 +59,8 @@ class Order(TimeStampedUUIDModel):
     status = models.CharField(
         verbose_name=_("status"),
         max_length=10,
-        choices=Gender.choices,
-        default=Gender.NEW,
+        choices=Statues.choices,
+        default=Statues.NEW,
     )
     is_ordered = models.BooleanField(verbose_name=_("is ordered"), default=False)
 

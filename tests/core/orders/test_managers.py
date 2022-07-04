@@ -25,7 +25,7 @@ def test_order_admin_with_status_accepted__create(superuser, client):
     assert response.status_code == status.HTTP_200_OK
     response = client.get(f"/admin/orders/acceptedorder/{order.pkid}/change/")
     assert str(order.user.username), str(order.status) in str(response.content)
-    assert str(order.status) in Order.Gender.ACCEPTED
+    assert str(order.status) in Order.Statues.ACCEPTED
 
 
 @pytest.mark.django_db
@@ -48,7 +48,7 @@ def test_order_admin_with_status_completed__create(superuser, client):
     assert response.status_code == status.HTTP_200_OK
     response = client.get(f"/admin/orders/completedorder/{order.pkid}/change/")
     assert str(order.user.username), str(order.status) in str(response.content)
-    assert str(order.status) in str(response.content), Order.Gender.COMPLETED
+    assert str(order.status) in str(response.content), Order.Statues.COMPLETED
 
 
 @pytest.mark.django_db
@@ -71,4 +71,16 @@ def test_order_admin_with_status_cancled__create(superuser, client):
     assert response.status_code == status.HTTP_200_OK
     response = client.get(f"/admin/orders/cancledorder/{order.pkid}/change/")
     assert str(order.user.username), str(order.status) in str(response.content)
-    assert str(order.status) in str(response.content), Order.Gender.CANCLED
+    assert str(order.status) in str(response.content), Order.Statues.CANCLED
+
+
+@pytest.mark.django_db
+def test_set_order_to_delivered(order):
+    Order.objects.update_order_payment_and_set_status_to_accpeted(order, order.payment)
+    assert order.status == Order.Statues.ACCEPTED
+
+
+@pytest.mark.django_db
+def test_set_order_to_delivered(order):
+    Order.objects.set_order_status_to_cancled(order)
+    assert order.status == Order.Statues.CANCLED

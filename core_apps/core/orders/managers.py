@@ -22,11 +22,11 @@ class OrderManager(models.Manager):
     def update_order_payment_and_set_status_to_accpeted(self, order, payment):
         order.payment = payment
         order.is_ordered = True
-        order.status = Order.Gender.ACCEPTED
+        order.status = order.Statues.ACCEPTED
         order.save()
 
     def set_order_status_to_cancled(self, order):
-        order.status = Order.Gender.CANCLED
+        order.status = order.Statues.CANCLED
         order.save()
 
 
