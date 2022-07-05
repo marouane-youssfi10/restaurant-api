@@ -3,11 +3,14 @@ import logging
 from rest_framework import serializers
 
 from core_apps.core.cart.models import Cart
+from core_apps.core.menu.models import FoodGallery
 
 logger = logging.getLogger(__name__)
 
 
 class CartSerializer(serializers.ModelSerializer):
+    food_image = serializers.SerializerMethodField(read_only=True)
+    food_price = serializers.SerializerMethodField(read_only=True)
     created_at = serializers.SerializerMethodField(read_only=True)
     updated_at = serializers.SerializerMethodField(read_only=True)
 
@@ -17,11 +20,22 @@ class CartSerializer(serializers.ModelSerializer):
             "id",
             "user",
             "food",
+            "food_price",
             "quantity",
             "sub_total",
+            "food_image",
             "created_at",
             "updated_at",
         )
+
+    def get_food_image(self, obj):
+        if FoodGallery.objects.filter(food=obj.food).exists():
+            food_gallery = FoodGallery.objects.get(food=obj.food)
+            return food_gallery.food_images.url
+        return ""
+
+    def get_food_price(self, obj):
+        return str(obj.food.price) + " dh"
 
     def get_created_at(self, obj):
         now = obj.created_at
@@ -40,9 +54,6 @@ class CartSerializer(serializers.ModelSerializer):
 
         if instance.food.food_name:
             data["food"] = instance.food.food_name
-
-        if instance.food.price:
-            data["food_price"] = instance.food.price
 
         return data
 
