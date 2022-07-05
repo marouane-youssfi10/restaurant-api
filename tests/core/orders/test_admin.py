@@ -4,24 +4,31 @@ from rest_framework import status
 
 from core_apps.core.orders.admin import OrderAdmin, OrderItemAdmin
 from core_apps.core.orders.models import Order, OrderItem
+from tests.conftest import CustomRequest
+from tests.core.orders.factories import OrderFactory, OrderItemFactory
+from tests.core.users.factories import UserFactory
 
 
 @pytest.mark.django_db
-def test_order_admin__save_model(client, order):
+def test_order_admin__save_model(client):
+    user = UserFactory(superuser=True)
+    order = OrderFactory(user=user)
     order_admin = OrderAdmin(model=Order, admin_site=AdminSite())
     order_admin.save_model(obj=order, request=None, form=None, change=None)
-    assert order_admin.has_add_permission(order) == False
-    assert order_admin.has_change_permission(order) == False
-    assert order_admin.has_delete_permission(order) == False
+    assert order_admin.has_add_permission(CustomRequest(user)) == True
+    assert order_admin.has_change_permission(CustomRequest(user)) == True
+    assert order_admin.has_delete_permission(CustomRequest(user)) == True
 
 
 @pytest.mark.django_db
-def test_order_items_admin__save_model(client, orderitem):
+def test_order_items_admin__save_model(client):
+    user = UserFactory(superuser=True)
+    orderitem = OrderItemFactory(user=user)
     order_item_admin = OrderItemAdmin(model=OrderItem, admin_site=AdminSite())
     order_item_admin.save_model(obj=orderitem, request=None, form=None, change=None)
-    assert order_item_admin.has_add_permission(orderitem) == False
-    assert order_item_admin.has_change_permission(orderitem) == False
-    assert order_item_admin.has_delete_permission(orderitem) == False
+    assert order_item_admin.has_add_permission(CustomRequest(user)) == True
+    assert order_item_admin.has_change_permission(CustomRequest(user)) == True
+    assert order_item_admin.has_delete_permission(CustomRequest(user)) == True
 
 
 @pytest.mark.django_db

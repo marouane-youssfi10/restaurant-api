@@ -4,6 +4,7 @@ from rest_framework import status
 
 from core_apps.core.cart.admin import CartAdmin
 from core_apps.core.cart.models import Cart
+from tests.conftest import CustomRequest
 from tests.core.users.factories import UserFactory
 from tests.core.menu.factories import FoodFactory
 from tests.core.cart.factories import CartFactory
@@ -11,14 +12,13 @@ from tests.core.cart.factories import CartFactory
 
 @pytest.mark.django_db
 def test_cart_admin__save_model(client):
-    user = UserFactory(staff=True)
-    food = FoodFactory()
-    cart = CartFactory.create(user=user, food=food)
+    user = UserFactory(superuser=True)
+    cart = CartFactory.create(user=user)
     cart_admin = CartAdmin(model=Cart, admin_site=AdminSite())
     cart_admin.save_model(obj=cart, request=None, form=None, change=None)
-    assert cart_admin.has_add_permission(cart) == False
-    assert cart_admin.has_change_permission(cart) == False
-    assert cart_admin.has_delete_permission(cart) == False
+    assert cart_admin.has_add_permission(CustomRequest(user)) == True
+    assert cart_admin.has_change_permission(CustomRequest(user)) == True
+    assert cart_admin.has_delete_permission(CustomRequest(user)) == True
 
 
 @pytest.mark.django_db
