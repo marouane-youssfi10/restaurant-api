@@ -18,6 +18,7 @@ class CartSerializer(serializers.ModelSerializer):
             "user",
             "food",
             "quantity",
+            "sub_total",
             "created_at",
             "updated_at",
         )
@@ -34,6 +35,15 @@ class CartSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
+        if instance.user.username:
+            data["user"] = instance.user.username
+
+        if instance.food.food_name:
+            data["food"] = instance.food.food_name
+
+        if instance.food.price:
+            data["food_price"] = instance.food.price
+
         return data
 
     def create(self, validated_data):
@@ -41,10 +51,11 @@ class CartSerializer(serializers.ModelSerializer):
             user=validated_data["user"], food=validated_data["food"]
         ).exists():
             cart = Cart.objects.get(
-                user=validated_data["user"], food=validated_data["food"]
+                user=validated_data["user"],
+                food=validated_data["food"],
             )
             cart.quantity += validated_data["quantity"]
             cart.save()
             return cart
 
-        return validated_data
+        return Cart.objects.create(**validated_data)
