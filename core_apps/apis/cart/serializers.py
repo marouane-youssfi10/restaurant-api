@@ -35,3 +35,14 @@ class CartSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         data = super().to_representation(instance)
         return data
+
+    def create(self, validated_data):
+        user = validated_data["user"]
+        food = validated_data["food"]
+        quantity = validated_data["quantity"]
+        if Cart.objects.filter(user=user, food=food).exists():
+            cart = Cart.objects.get(user=user, food=food)
+            cart.quantity += quantity
+            cart.save()
+            return cart
+        return validated_data
