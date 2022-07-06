@@ -22,9 +22,6 @@ class CategoryView(
     serializer_class = CategorySerializer
     queryset = Category.objects.all()
 
-    def retrieve(self, request, *args, **kwargs):
-        return super().retrieve(request, *args, **kwargs)
-
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
 
@@ -34,6 +31,15 @@ class FoodView(
 ):
     serializer_class = FoodSerializer
     queryset = Food.objects.all()
+
+    def get_queryset(self):
+        slug_food = self.request.query_params.get("slug_food", None)
+        if slug_food is not None:
+            return Food.objects.filter(slug=slug_food)
+
+        queryset = super().get_queryset()
+        category = self.request.query_params.get("category_slug")
+        return queryset.filter(category__slug=category)
 
     def retrieve(self, request, *args, **kwargs):
         return super().retrieve(request, *args, **kwargs)

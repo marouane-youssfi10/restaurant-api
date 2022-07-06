@@ -1,5 +1,6 @@
 import logging
 
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import serializers
 
 from core_apps.core.menu.models import Category, Food, FoodGallery, ReviewRating
@@ -45,7 +46,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class FoodSerializer(serializers.ModelSerializer):
-    category_info = serializers.SerializerMethodField(read_only=True)
+    food_image = serializers.SerializerMethodField(read_only=True)
     created_at = serializers.SerializerMethodField(read_only=True)
     updated_at = serializers.SerializerMethodField(read_only=True)
 
@@ -57,21 +58,22 @@ class FoodSerializer(serializers.ModelSerializer):
             "slug",
             "description",
             "price",
-            "category_info",
+            "food_image",
             "created_at",
             "updated_at",
         )
 
-    def get_category_info(self, obj):
-        if obj.category.category_image:
-            category_image = obj.category.category_image.url
-        else:
-            category_image = ""
-        return {
-            "id": obj.category.id,
-            "category_name": obj.category.category_name,
-            "category_image": category_image,
-        }
+    def get_food_image(self, obj):
+        food_image = None
+        try:
+            food = Food.objects.get(id=obj.id)
+            food_gallery = FoodGallery.objects.get(food=food)
+            if food_gallery.food_images:
+                food_image = food_gallery.food_images.url
+        except ObjectDoesNotExist:
+            pass
+
+        return food_image
 
     def get_created_at(self, obj):
         now = obj.created_at
@@ -99,7 +101,6 @@ class FoodGallerySerializer(serializers.ModelSerializer):
         fields = (
             "id",
             "food_images",
-            "food_info",
             "created_at",
             "updated_at",
             "food_info",
