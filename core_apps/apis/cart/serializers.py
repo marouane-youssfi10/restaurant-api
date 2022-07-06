@@ -1,4 +1,5 @@
 import logging
+from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
 
@@ -56,6 +57,15 @@ class CartSerializer(serializers.ModelSerializer):
             data["food"] = instance.food.food_name
 
         return data
+
+    def validate(self, attrs):
+        quantity = attrs.get("quantity", None)
+        if not quantity:
+            raise serializers.ValidationError(
+                {"quantity": _("This field is required.")}
+            )
+
+        return attrs
 
     def create(self, validated_data):
         if Cart.objects.filter(

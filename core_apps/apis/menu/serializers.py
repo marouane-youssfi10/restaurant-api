@@ -63,12 +63,14 @@ class FoodSerializer(serializers.ModelSerializer):
         )
 
     def get_category_info(self, obj):
+        if obj.category.category_image:
+            category_image = obj.category.category_image.url
+        else:
+            category_image = ""
         return {
             "id": obj.category.id,
             "category_name": obj.category.category_name,
-            "slug": obj.category.slug,
-            "description": obj.category.description,
-            # "category_image": obj.category.category_image,
+            "category_image": category_image,
         }
 
     def get_created_at(self, obj):
@@ -107,8 +109,6 @@ class FoodGallerySerializer(serializers.ModelSerializer):
         return {
             "id": obj.food.id,
             "food_name": obj.food.food_name,
-            "slug": obj.food.slug,
-            "description": obj.food.description,
             "price": obj.food.price,
         }
 
@@ -152,21 +152,20 @@ class ReviewRatingSerializer(serializers.ModelSerializer):
 
     def get_food_info(self, obj):
         return {
-            "pkid": obj.food.pkid,
+            "id": obj.food.id,
             "food_name": obj.food.food_name,
-            "slug": obj.food.slug,
-            "description": obj.food.description,
             "price": obj.food.price,
         }
 
     def get_user_info(self, obj):
+        if obj.user.profile_photo:
+            profile_photo = obj.user.profile_photo.url
+        else:
+            profile_photo = ""
         return {
             "id": obj.user.id,
             "username": obj.user.username,
-            "first_name": obj.user.first_name,
-            "last_name": obj.user.last_name,
-            "email": obj.user.email,
-            # "profile_photo": obj.user.profile_photo.url,
+            "profile_photo": profile_photo,
         }
 
     def get_created_at(self, obj):
