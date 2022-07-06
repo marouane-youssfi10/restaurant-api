@@ -91,7 +91,6 @@ class FoodSerializer(serializers.ModelSerializer):
 
 
 class ReviewRatingSerializer(serializers.ModelSerializer):
-    food_info = serializers.SerializerMethodField(read_only=True)
     user_info = serializers.SerializerMethodField(read_only=True)
     created_at = serializers.SerializerMethodField(read_only=True)
     updated_at = serializers.SerializerMethodField(read_only=True)
@@ -105,26 +104,14 @@ class ReviewRatingSerializer(serializers.ModelSerializer):
             "created_at",
             "updated_at",
             "user_info",
-            "food_info",
         )
 
-    def get_food_info(self, obj):
-        return {
-            "id": obj.food.id,
-            "food_name": obj.food.food_name,
-            "price": obj.food.price,
-        }
-
     def get_user_info(self, obj):
+        profile_photo = None
         if obj.user.profile_photo:
             profile_photo = obj.user.profile_photo.url
-        else:
-            profile_photo = ""
-        return {
-            "id": obj.user.id,
-            "username": obj.user.username,
-            "profile_photo": profile_photo,
-        }
+
+        return {"username": obj.user.username, "profile_photo": profile_photo}
 
     def get_created_at(self, obj):
         now = obj.created_at
