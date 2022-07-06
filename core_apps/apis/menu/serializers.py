@@ -90,49 +90,6 @@ class FoodSerializer(serializers.ModelSerializer):
         return data
 
 
-class FoodGallerySerializer(serializers.ModelSerializer):
-    food_images = serializers.SerializerMethodField(read_only=True)
-    food_info = serializers.SerializerMethodField(read_only=True)
-    created_at = serializers.SerializerMethodField(read_only=True)
-    updated_at = serializers.SerializerMethodField(read_only=True)
-
-    class Meta:
-        model = FoodGallery
-        fields = (
-            "id",
-            "food_images",
-            "created_at",
-            "updated_at",
-            "food_info",
-        )
-
-    def get_food_info(self, obj):
-        return {
-            "id": obj.food.id,
-            "food_name": obj.food.food_name,
-            "price": obj.food.price,
-        }
-
-    def get_food_images(self, obj):
-        if obj.food_images:
-            return obj.food_images.url
-        return ""
-
-    def get_created_at(self, obj):
-        now = obj.created_at
-        formatted_date = now.strftime("%m/%d/%Y, %H:%M:%S")
-        return formatted_date
-
-    def get_updated_at(self, obj):
-        then = obj.updated_at
-        formatted_date = then.strftime("%m/%d/%Y, %H:%M:%S")
-        return formatted_date
-
-    def to_representation(self, instance):
-        data = super().to_representation(instance)
-        return data
-
-
 class ReviewRatingSerializer(serializers.ModelSerializer):
     food_info = serializers.SerializerMethodField(read_only=True)
     user_info = serializers.SerializerMethodField(read_only=True)
