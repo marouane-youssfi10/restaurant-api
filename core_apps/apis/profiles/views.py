@@ -18,7 +18,6 @@ logger = logging.getLogger(__name__)
 class CustomersView(
     mixins.RetrieveModelMixin,
     mixins.UpdateModelMixin,
-    mixins.ListModelMixin,
     viewsets.GenericViewSet,
 ):
     permission_classes = [permissions.IsAuthenticated]
@@ -26,9 +25,6 @@ class CustomersView(
     queryset = Customer.objects.all()
     renderer_classes = (CustomersJSONRenderer,)
     pagination_class = CustomersPagination
-
-    def list(self, request, *args, **kwargs):
-        return super().list(request, *args, **kwargs)
 
     def retrieve(self, request, *args, **kwargs):
         return super().retrieve(request, *args, **kwargs)

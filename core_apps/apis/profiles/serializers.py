@@ -9,21 +9,10 @@ logger = logging.getLogger(__name__)
 
 
 class CustomersSerializer(serializers.ModelSerializer):
-    user_info = serializers.SerializerMethodField(read_only=True)
     full_name = serializers.SerializerMethodField(read_only=True)
+    country = CountryField(name_only=True)
     created_at = serializers.SerializerMethodField(read_only=True)
     updated_at = serializers.SerializerMethodField(read_only=True)
-    country = CountryField(name_only=True)
-
-    def get_user_info(self, obj):
-        return {
-            "pkid": obj.user.pkid,
-            "username": obj.user.username,
-            "first_name": obj.user.first_name,
-            "last_name": obj.user.last_name,
-            "email": obj.user.email,
-            # "profile_photo": obj.user.profile_photo.url,
-        }
 
     def get_full_name(self, obj):
         first_name = obj.user.first_name.title()
@@ -40,11 +29,19 @@ class CustomersSerializer(serializers.ModelSerializer):
         formatted_date = then.strftime("%m/%d/%Y, %H:%M:%S")
         return formatted_date
 
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data["photo_profile"] = None
+        if instance.user.profile_photo:
+            data["photo_profile"] = instance.user.profile_photo.url
+        data["email"] = instance.user.email
+
+        return data
+
     class Meta:
         model = Customer
         fields = (
             "id",
-            "user_info",
             "full_name",
             "gender",
             "phone_number",

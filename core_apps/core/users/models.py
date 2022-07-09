@@ -20,7 +20,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(
         verbose_name=_("email address"), db_index=True, unique=True
     )
-    profile_photo = models.ImageField(verbose_name=_("profile photo"), blank=True)
+    profile_photo = models.ImageField(
+        verbose_name=_("profile photo"), upload_to="photos/profile_photo", blank=True
+    )
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
 

@@ -12,4 +12,4 @@ class CustomersJSONRenderer(JSONRenderer):
 
         if errors is not None:
             return super(CustomersJSONRenderer, self).render(data)
-        return json.dumps({"status_code": status_code, "customers": data})
+        return json.dumps({"status_code": status_code, "customer": data})
