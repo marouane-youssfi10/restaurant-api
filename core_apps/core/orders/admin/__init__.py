@@ -13,7 +13,7 @@ from core_apps.core.orders.utils import order_ref_generator
 
 class OrderInline(admin.TabularInline):
     model = OrderItem
-    extra = 2
+    extra = 1
 
 
 class OrderAdmin(admin.ModelAdmin):
@@ -29,11 +29,9 @@ class OrderAdmin(admin.ModelAdmin):
         "status",
         "is_ordered",
         "created_at",
-        "updated_at",
     ]
     list_display_links = ["pkid", "order_number"]
-    search_fields = ["user__username"]
-    inlines = [OrderInline]
+    search_fields = ["user__username", "user__email"]
 
     class Meta:
         model = Order
@@ -66,9 +64,11 @@ class AcceptedOrderAdmin(admin.ModelAdmin):
         "order_total",
         "status",
         "is_ordered",
+        "updated_at",
     ]
     list_display_links = ["pkid", "order_number"]
-    search_fields = ["user"]
+    search_fields = ["user__username", "user__email"]
+    inlines = [OrderInline]
 
     class Meta:
         model = AcceptedOrder
@@ -103,9 +103,11 @@ class CompletedOrderAdmin(admin.ModelAdmin):
         "order_total",
         "status",
         "is_ordered",
+        "updated_at",
     ]
     list_display_links = ["pkid", "order_number"]
-    search_fields = ["user"]
+    search_fields = ["user__username", "user__email"]
+    inlines = [OrderInline]
 
     class Meta:
         model = CompletedOrder
@@ -133,9 +135,11 @@ class CancledOrderAdmin(admin.ModelAdmin):
         "order_total",
         "status",
         "is_ordered",
+        "updated_at",
     ]
     list_display_links = ["pkid", "order_number"]
-    search_fields = ["user"]
+    search_fields = ["user__username", "user__email"]
+    inlines = [OrderInline]
 
     class Meta:
         model = CancledOrder
@@ -155,16 +159,32 @@ class CancledOrderAdmin(admin.ModelAdmin):
 class OrderItemAdmin(admin.ModelAdmin):
     list_display = [
         "pkid",
-        "user",
-        "order",
+        "user_name",
+        "order_id",
         "payment",
         "quantity",
         "food_price",
         "ordered",
+        "created_at",
     ]
-    list_display_links = ["pkid", "user", "order"]
+    list_display_links = ["pkid"]
     list_filter = ["ordered"]
-    search_fields = ["user"]
+    search_fields = ["user__username", "user__email"]
+
+    def user_name(self, obj):
+        return format_html(
+            '<a href="/admin/users/user/?q={}">{} {}</a>',
+            obj.user.username,
+            obj.user.first_name,
+            obj.user.last_name,
+        )
+
+    def order_id(self, obj):
+        return format_html(
+            '<a href="/admin/orders/acceptedorder/{}/change">{}</a>',
+            obj.order.pkid,
+            obj.order,
+        )
 
 
 admin.site.register(Order, OrderAdmin)
