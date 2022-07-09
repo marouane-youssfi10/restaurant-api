@@ -3,7 +3,7 @@ import logging
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import serializers
 
-from core_apps.apis.menu.exceptions import ReviewDoesNotExists, AlreadyRated
+from core_apps.apis.menu.exceptions import ReviewUserDoesNotExists, AlreadyRated
 from core_apps.core.menu.models import Category, Food, FoodGallery, ReviewRating
 
 logger = logging.getLogger(__name__)
@@ -92,7 +92,7 @@ class FoodSerializer(serializers.ModelSerializer):
 
 
 class ReviewRatingSerializer(serializers.ModelSerializer):
-    food = serializers.StringRelatedField(read_only=True)
+    food = serializers.StringRelatedField(read_only=False)
     created_at = serializers.SerializerMethodField(read_only=True)
     updated_at = serializers.SerializerMethodField(read_only=True)
 
@@ -126,23 +126,36 @@ class ReviewRatingSerializer(serializers.ModelSerializer):
         return data
 
     def validate(self, attrs):
-        # check this user if exists
-        try:
-            ReviewRating.objects.get(user__username=self.context["request"].user)
-        except ReviewRating.DoesNotExist:
-            logger.error("the review of this user does not exists")
-            raise ReviewDoesNotExists
+        user = self.context["request"].user
+        if "review" in attrs and "rating" in attrs and "food" in self.initial_data:
+            # check if the user Already Rated
+            if (
+                ReviewRating.objects.filter(user=self.context["request"].user).count()
+                >= 1
+            ):
+                raise AlreadyRated
+            return attrs
 
-        # check if the user Already Rated
-        if (
-            ReviewRating.objects.filter(
-                user__username=self.context["request"].user
-            ).count()
-            > 1
-        ):
-            raise AlreadyRated
+        # check this review user if exists
+        try:
+            ReviewRating.objects.get(user__username=user)
+        except ReviewRating.DoesNotExist:
+            logger.error(f"the review of this user {user} does not exists")
+            raise ReviewUserDoesNotExists
 
         return attrs
+
+    def create(self, validated_data):
+        food = self.initial_data.get("food", None)
+        review_rating = ReviewRating.objects.create(
+            user=self.context["request"].user,
+            food_id=food,
+            review=validated_data["review"],
+            rating=validated_data["rating"],
+        )
+        review_rating.save()
+
+        return review_rating
 
     def update(self, instance, validated_data):
         review_rating = ReviewRating.objects.get(user__username=instance)

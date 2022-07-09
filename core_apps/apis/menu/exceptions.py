@@ -1,7 +1,7 @@
 from rest_framework.exceptions import APIException
 
 
-class ReviewDoesNotExists(APIException):
+class ReviewUserDoesNotExists(APIException):
     status_code = 400
     default_detail = "the review of this user does not exist"
 
