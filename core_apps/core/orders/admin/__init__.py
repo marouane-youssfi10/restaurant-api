@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.utils.html import format_html
 
 from core_apps.core.orders.models import (
     Order,
@@ -7,6 +8,7 @@ from core_apps.core.orders.models import (
     OrderItem,
     CancledOrder,
 )
+from core_apps.core.orders.utils import order_ref_generator
 
 
 class OrderInline(admin.TabularInline):
@@ -17,7 +19,7 @@ class OrderInline(admin.TabularInline):
 class OrderAdmin(admin.ModelAdmin):
     list_display = [
         "pkid",
-        "user",
+        "user_name",
         "payment",
         "order_number",
         "address",
@@ -29,8 +31,8 @@ class OrderAdmin(admin.ModelAdmin):
         "created_at",
         "updated_at",
     ]
-    list_display_links = ["pkid", "user", "order_number"]
-    search_fields = ["user"]
+    list_display_links = ["pkid", "order_number"]
+    search_fields = ["user__username"]
     inlines = [OrderInline]
 
     class Meta:
@@ -39,11 +41,24 @@ class OrderAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         return Order.objects.all_new_orders()
 
+    def save_model(self, request, obj, form, change):
+        obj.order_number = order_ref_generator()
+        super().save_model(request, obj, form, change)
+
+    def user_name(self, obj):
+        return format_html(
+            '<a href="/admin/users/user/?q={}">{} {}</a>',
+            obj.user.username,
+            obj.user.first_name,
+            obj.user.last_name,
+        )
+
 
 class AcceptedOrderAdmin(admin.ModelAdmin):
     list_display = [
         "pkid",
-        "user",
+        "user_name",
+        "user_payment",
         "order_number",
         "address",
         "country",
@@ -52,7 +67,7 @@ class AcceptedOrderAdmin(admin.ModelAdmin):
         "status",
         "is_ordered",
     ]
-    list_display_links = ["pkid", "user", "order_number"]
+    list_display_links = ["pkid", "order_number"]
     search_fields = ["user"]
 
     class Meta:
@@ -61,11 +76,26 @@ class AcceptedOrderAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         return AcceptedOrder.objects.all_order_accepted()
 
+    def user_payment(self, obj):
+        return format_html(
+            '<a href="/admin/payments/payment/{}/change/">{}</a>',
+            obj.payment.pkid,
+            obj.payment,
+        )
+
+    def user_name(self, obj):
+        return format_html(
+            '<a href="/admin/users/user/?q={}">{} {}</a>',
+            obj.user.username,
+            obj.user.first_name,
+            obj.user.last_name,
+        )
+
 
 class CompletedOrderAdmin(admin.ModelAdmin):
     list_display = [
         "pkid",
-        "user",
+        "user_name",
         "order_number",
         "address",
         "country",
@@ -74,7 +104,7 @@ class CompletedOrderAdmin(admin.ModelAdmin):
         "status",
         "is_ordered",
     ]
-    list_display_links = ["pkid", "user", "order_number"]
+    list_display_links = ["pkid", "order_number"]
     search_fields = ["user"]
 
     class Meta:
@@ -83,11 +113,19 @@ class CompletedOrderAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         return CompletedOrder.objects.all_order_completed()
 
+    def user_name(self, obj):
+        return format_html(
+            '<a href="/admin/users/user/?q={}">{} {}</a>',
+            obj.user.username,
+            obj.user.first_name,
+            obj.user.last_name,
+        )
+
 
 class CancledOrderAdmin(admin.ModelAdmin):
     list_display = [
         "pkid",
-        "user",
+        "user_name",
         "order_number",
         "address",
         "country",
@@ -96,7 +134,7 @@ class CancledOrderAdmin(admin.ModelAdmin):
         "status",
         "is_ordered",
     ]
-    list_display_links = ["pkid", "user", "order_number"]
+    list_display_links = ["pkid", "order_number"]
     search_fields = ["user"]
 
     class Meta:
@@ -104,6 +142,14 @@ class CancledOrderAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         return CancledOrder.objects.all_order_cancled()
+
+    def user_name(self, obj):
+        return format_html(
+            '<a href="/admin/users/user/?q={}">{} {}</a>',
+            obj.user.username,
+            obj.user.first_name,
+            obj.user.last_name,
+        )
 
 
 class OrderItemAdmin(admin.ModelAdmin):

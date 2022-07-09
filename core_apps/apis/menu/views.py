@@ -1,7 +1,7 @@
 import logging
 
 from django.contrib.auth import get_user_model
-from rest_framework import mixins, viewsets
+from rest_framework import mixins, viewsets, permissions
 
 from core_apps.apis.menu.paginations import ReviewRatingPagination
 from core_apps.apis.menu.serializers import (
@@ -51,14 +51,24 @@ class ReviewRatingView(
     mixins.UpdateModelMixin,
     viewsets.GenericViewSet,
 ):
+    permission_classes = [permissions.IsAuthenticated]
     serializer_class = ReviewRatingSerializer
     pagination_class = ReviewRatingPagination
     queryset = ReviewRating.objects.all()
 
+    def get_object(self):
+        return self.request.user
+
     def get_queryset(self):
+        print("----------- get_queryset -----------")
         queryset = super().get_queryset()
         food = self.request.query_params.get("by_food")
         return queryset.filter(food__slug=food)
 
+    def partial_update(self, request, *args, **kwargs):
+        print("----------- partial_update -----------")
+        return super().update(request, *args, **kwargs)
+
     def list(self, request, *args, **kwargs):
+        print("----------- list -----------")
         return super().list(request, *args, **kwargs)

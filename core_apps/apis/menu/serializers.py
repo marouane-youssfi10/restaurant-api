@@ -126,3 +126,12 @@ class ReviewRatingSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         data = super().to_representation(instance)
         return data
+
+    def update(self, instance, validated_data):
+        print("\n--> ", self.context["request"], "\n")
+        print("\n--> ", self.context, "\n")
+        # print('\n--> ', self.context["review"], '\n')
+        review_rating = ReviewRating.objects.filter(
+            user=self.context["request"].user
+        ).update(review=validated_data["review"])
+        return review_rating
