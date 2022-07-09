@@ -19,7 +19,7 @@ class Order(TimeStampedUUIDModel):
     class Statues(models.TextChoices):
         NEW = "new", _("new")
         ACCEPTED = "accepted", _("accepted")
-        COMPLETED = "completed", _("completed,")
+        COMPLETED = "completed", _("completed")
         CANCLED = "cancled", _("cancled")
 
     user = models.ForeignKey(

@@ -12,13 +12,19 @@ logger = logging.getLogger(__name__)
 
 
 class OrderView(
-    mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet
+    mixins.CreateModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    viewsets.GenericViewSet,
 ):
     serializer_class = OrderSerializer
     queryset = Order.objects.all()
 
     def create(self, request, *args, **kwargs):
         return super().create(request, *args, **kwargs)
+
+    def partial_update(self, request, *args, **kwargs):
+        return super().partial_update(request, *args, **kwargs)
 
     def retrieve(self, request, *args, **kwargs):
         return super().retrieve(request, *args, **kwargs)

@@ -3,7 +3,7 @@ import logging
 from django_countries.serializer_fields import CountryField
 from rest_framework import serializers
 
-from core_apps.apis.orders.exceptions import CartItemEmpty
+from core_apps.apis.orders.exceptions import CartItemIsEmpty
 from core_apps.core.cart.models import Cart
 from core_apps.core.orders.models import Order
 from core_apps.core.orders.utils import generate_order_number
@@ -48,7 +48,7 @@ class OrderSerializer(serializers.ModelSerializer):
         data = super().to_representation(instance)
         return data
 
-    def _all_foods_prices(self, user):
+    def _get_all_foods_prices(self, user):
         carts = Cart.objects.filter(user=user)
         # get all total price of foods
         total = 0
@@ -58,19 +58,29 @@ class OrderSerializer(serializers.ModelSerializer):
         return total
 
     def validate(self, attrs):
+        if "status" in self.initial_data:
+            return attrs
+
         carts = Cart.objects.filter(user=attrs["user"])
         cart_count = carts.count()
         if cart_count <= 0:
-            raise CartItemEmpty
+            raise CartItemIsEmpty
 
         return attrs
 
     def create(self, validated_data):
-        total_price = self._all_foods_prices(validated_data["user"])
-        # save the order
+        total_price = self._get_all_foods_prices(validated_data["user"])
+        # save order
         order = Order.objects.create(**validated_data)
         order.order_number = generate_order_number()
         order.order_total = total_price
+        order.save()
+
+        return order
+
+    def update(self, instance, validated_data):
+        order = Order.objects.get(user=instance.user, order_number=instance)
+        order.status = validated_data["status"]
         order.save()
 
         return order

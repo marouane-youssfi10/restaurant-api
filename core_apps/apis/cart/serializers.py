@@ -61,6 +61,7 @@ class CartSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         quantity = attrs.get("quantity", None)
         if not quantity:
+            logger.info("the quantity field is required")
             raise serializers.ValidationError(
                 {"quantity": _("This field is required.")}
             )
@@ -68,13 +69,9 @@ class CartSerializer(serializers.ModelSerializer):
         return attrs
 
     def create(self, validated_data):
-        if Cart.objects.filter(
-            user=validated_data["user"], food=validated_data["food"]
-        ).exists():
-            cart = Cart.objects.get(
-                user=validated_data["user"],
-                food=validated_data["food"],
-            )
+        user = self.context["request"].user
+        if Cart.objects.filter(user=user, food=validated_data["food"]).exists():
+            cart = Cart.objects.get(user=user, food=validated_data["food"])
             cart.quantity += validated_data["quantity"]
             cart.save()
             return cart

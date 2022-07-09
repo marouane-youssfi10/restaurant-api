@@ -13,6 +13,6 @@ def generate_order_number():
     dt = int(datetime.date.today().strftime("%d"))
     mt = int(datetime.date.today().strftime("%m"))
     d = datetime.date(yr, mt, dt)
-    current_date = d.strftime("%d%m%Y")  # 20210305
+    current_date = d.strftime("%d%m%Y")  # 20220305
     order_number = current_date + str(order_ref_generator())
     return order_number
