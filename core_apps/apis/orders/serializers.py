@@ -3,7 +3,7 @@ import logging
 from django_countries.serializer_fields import CountryField
 from rest_framework import serializers
 
-from core_apps.apis.orders.exceptions import CartItemIsEmpty
+from core_apps.apis.orders.exceptions import CartItemIsEmpty, HaveMoreOrders
 from core_apps.core.cart.models import Cart
 from core_apps.core.orders.models import Order
 from core_apps.core.orders.utils import generate_order_number
@@ -58,19 +58,24 @@ class OrderSerializer(serializers.ModelSerializer):
         return total
 
     def validate(self, attrs):
+        # check status in request post is exists to update
         if "status" in self.initial_data:
             return attrs
 
-        carts = Cart.objects.filter(user=attrs["user"])
-        cart_count = carts.count()
-        if cart_count <= 0:
+        # check if there's more than 2 orders user
+        user = attrs["user"]
+        if Order.objects.filter(user=user, status=Order.Statues.NEW).count() >= 2:
+            raise HaveMoreOrders
+
+        # check if cart user is empty
+        if Cart.objects.filter(user=user).count() <= 0:
             raise CartItemIsEmpty
 
         return attrs
 
     def create(self, validated_data):
         total_price = self._get_all_foods_prices(validated_data["user"])
-        # save order
+        # create order
         order = Order.objects.create(**validated_data)
         order.order_number = generate_order_number()
         order.order_total = total_price

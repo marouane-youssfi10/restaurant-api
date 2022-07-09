@@ -1,4 +1,5 @@
 import logging
+from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
 
@@ -51,6 +52,16 @@ class PaymentSerializer(serializers.ModelSerializer):
         return order.order_total
 
     def validate(self, attrs):
+        user = attrs["user"]
+        # check if there's an order of this user after create a payment
+        if not Order.objects.filter(
+            user=user, is_ordered=False, status=Order.Statues.NEW
+        ).exists():
+            raise serializers.ValidationError(
+                _(f"There's no Order for this user '{user}'")
+            )
+
+        # check the order number if exist
         order_number = self._order_number(attrs["user"])
         if not Order.objects.filter(
             user=attrs["user"], is_ordered=False, order_number=order_number
