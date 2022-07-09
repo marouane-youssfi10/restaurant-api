@@ -9,3 +9,8 @@ class CartItemIsEmpty(APIException):
 class HaveMoreOrders(APIException):
     status_code = 400
     default_detail = "you have already order not completed"
+
+
+class NoStatusInParams(APIException):
+    status_code = 400
+    default_detail = "you must pass status in params"
