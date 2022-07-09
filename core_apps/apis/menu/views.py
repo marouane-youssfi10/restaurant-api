@@ -60,15 +60,12 @@ class ReviewRatingView(
         return self.request.user
 
     def get_queryset(self):
-        print("----------- get_queryset -----------")
         queryset = super().get_queryset()
         food = self.request.query_params.get("by_food")
         return queryset.filter(food__slug=food)
 
     def partial_update(self, request, *args, **kwargs):
-        print("----------- partial_update -----------")
         return super().update(request, *args, **kwargs)
 
     def list(self, request, *args, **kwargs):
-        print("----------- list -----------")
         return super().list(request, *args, **kwargs)

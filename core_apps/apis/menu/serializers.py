@@ -3,6 +3,7 @@ import logging
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import serializers
 
+from core_apps.apis.menu.exceptions import ReviewDoesNotExists, AlreadyRated
 from core_apps.core.menu.models import Category, Food, FoodGallery, ReviewRating
 
 logger = logging.getLogger(__name__)
@@ -91,7 +92,7 @@ class FoodSerializer(serializers.ModelSerializer):
 
 
 class ReviewRatingSerializer(serializers.ModelSerializer):
-    user_info = serializers.SerializerMethodField(read_only=True)
+    food = serializers.StringRelatedField(read_only=True)
     created_at = serializers.SerializerMethodField(read_only=True)
     updated_at = serializers.SerializerMethodField(read_only=True)
 
@@ -99,19 +100,12 @@ class ReviewRatingSerializer(serializers.ModelSerializer):
         model = ReviewRating
         fields = (
             "id",
+            "food",
             "review",
             "rating",
             "created_at",
             "updated_at",
-            "user_info",
         )
-
-    def get_user_info(self, obj):
-        profile_photo = None
-        if obj.user.profile_photo:
-            profile_photo = obj.user.profile_photo.url
-
-        return {"username": obj.user.username, "profile_photo": profile_photo}
 
     def get_created_at(self, obj):
         now = obj.created_at
@@ -125,13 +119,34 @@ class ReviewRatingSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
+        data["profile_photo"] = None
+        data["username"] = instance.user.username
+        if instance.user.profile_photo:
+            data["profile_photo"] = instance.user.profile_photo.url
         return data
 
+    def validate(self, attrs):
+        # check this user if exists
+        try:
+            ReviewRating.objects.get(user__username=self.context["request"].user)
+        except ReviewRating.DoesNotExist:
+            logger.error("the review of this user does not exists")
+            raise ReviewDoesNotExists
+
+        # check if the user Already Rated
+        if (
+            ReviewRating.objects.filter(
+                user__username=self.context["request"].user
+            ).count()
+            > 1
+        ):
+            raise AlreadyRated
+
+        return attrs
+
     def update(self, instance, validated_data):
-        print("\n--> ", self.context["request"], "\n")
-        print("\n--> ", self.context, "\n")
-        # print('\n--> ', self.context["review"], '\n')
-        review_rating = ReviewRating.objects.filter(
-            user=self.context["request"].user
-        ).update(review=validated_data["review"])
+        review_rating = ReviewRating.objects.get(user__username=instance)
+        review_rating.review = validated_data["review"]
+        review_rating.save()
+
         return review_rating
