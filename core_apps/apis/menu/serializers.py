@@ -27,9 +27,10 @@ class CategorySerializer(serializers.ModelSerializer):
         )
 
     def get_category_image(self, obj):
+        category_image = None
         if obj.category_image:
             return obj.category_image.url
-        return ""
+        return category_image
 
     def get_created_at(self, obj):
         now = obj.created_at

@@ -16,7 +16,6 @@ def test_retrieve_food_by_name(api_client, user, food):
     response = api_client.get(url + str("?food_name=" + food_image.food.food_name))
     assert response.status_code == status.HTTP_200_OK, response.content
     assert "results" in response.json()
-    print("response.json() = ", response.json())
     assert response.json()["count"] == 1
     assert response.json()["results"][0]["food_name"] == food_image.food.food_name
     assert response.json()["results"][0]["slug"] == food_image.food.slug
