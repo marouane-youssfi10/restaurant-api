@@ -9,3 +9,8 @@ class ReviewUserDoesNotExists(APIException):
 class AlreadyRated(APIException):
     status_code = 400
     default_detail = "You have already Rated this food"
+
+
+class OrderDoesNotExist(APIException):
+    status_code = 400
+    default_detail = "Order Does Not Exist"

@@ -1,8 +1,9 @@
 import logging
 
 from django.contrib.auth import get_user_model
-from rest_framework import mixins, viewsets, permissions
+from rest_framework import mixins, permissions, viewsets
 
+from core_apps.apis.menu.exceptions import OrderDoesNotExist
 from core_apps.apis.orders.exceptions import NoStatusInParams
 from core_apps.apis.orders.serializers import OrderSerializer
 from core_apps.core.orders.models import Order
@@ -22,11 +23,19 @@ class OrderView(
 ):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = OrderSerializer
+    queryset = Order.objects.all()
+
+    def get_object(self):
+        try:
+            return Order.objects.get(pkid=self.kwargs["pk"])
+        except Order.DoesNotExist:
+            raise OrderDoesNotExist
 
     def get_queryset(self):
+        queryset = super().get_queryset()
         status = self.request.query_params.get("status", None)
         if status is not None:
-            return Order.objects.filter(user=self.request.user, status=status)
+            return queryset.filter(user=self.request.user, status=status)
 
         raise NoStatusInParams
 

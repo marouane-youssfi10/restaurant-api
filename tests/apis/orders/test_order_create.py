@@ -19,9 +19,9 @@ def test_order_create(api_client, user, food):
         data={
             "user": user.pkid,
             "order_number": "300620221",
-            "address": "street 2",
+            "address": "street 1",
             "country": "Morocco",
-            "city": "Roma",
+            "city": "meknes",
             "order_total": 25.0,
         },
     )
@@ -33,6 +33,20 @@ def test_order_create(api_client, user, food):
     assert response.json()["country"] == "Morocco"
     assert response.json()["city"] == order.city
     assert response.json()["order_total"] == order.order_total
+    # check if there's more than one orders
+    response = api_client.post(
+        url,
+        data={
+            "user": user.pkid,
+            "order_number": "300620221",
+            "address": "street 1",
+            "country": "Morocco",
+            "city": "meknes",
+            "order_total": 25.0,
+        },
+    )
+    assert response.status_code == status.HTTP_400_BAD_REQUEST, response.content
+    assert response.json()["detail"] == "you have already order not completed"
 
 
 @pytest.mark.django_db

@@ -62,9 +62,9 @@ class OrderSerializer(serializers.ModelSerializer):
         if "status" in self.initial_data:
             return attrs
 
-        # check if there's more than 2 orders user
+        # check if there's more than 1 orders user
         user = attrs["user"]
-        if Order.objects.filter(user=user, status=Order.Statues.NEW).count() >= 2:
+        if Order.objects.filter(user=user, status=Order.Statues.NEW).count() >= 1:
             raise HaveMoreOrders
 
         # check if cart user is empty
@@ -84,6 +84,7 @@ class OrderSerializer(serializers.ModelSerializer):
         return order
 
     def update(self, instance, validated_data):
+        print("--------- update ---------")
         order = Order.objects.get(user=instance.user, order_number=instance)
         order.status = validated_data["status"]
         order.save()
