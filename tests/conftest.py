@@ -62,7 +62,6 @@ class CustomRequest(object):
 # https://www.cameronmaske.com/muting-django-signals-with-a-pytest-fixture/
 @pytest.fixture(autouse=True)  # Automatically use in tests.
 def mute_signals(request):
-    print("----- mute_signals -----")
     # Skip applying, if marked with `enabled_signals`
     if "enable_signals" in request.keywords:
         return
