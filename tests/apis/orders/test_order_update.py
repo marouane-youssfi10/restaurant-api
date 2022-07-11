@@ -15,13 +15,14 @@ def test_order_status_patch(api_client, user, order):
     api_client.force_authenticate(user)
     response = api_client.patch(url, data={"status": "accepted"})
     assert response.status_code == status.HTTP_200_OK, response.content
-    # review_rating = ReviewRatingFactory.create(user=user)
-    # url = reverse(
-    #     "menu:review-rating-detail",
-    #     args=[review_rating.pkid],
-    # )
-    # assert url == f"/api/menu/review-rating/{review_rating.pkid}/"
-    # api_client.force_authenticate(user)
-    # response = api_client.patch(url, data={"review": "review test updated"})
-    # assert response.status_code == status.HTTP_200_OK, response.content
-    # assert response.json()["review"] == "review test updated"
+    # check the Order does not exist
+    url1 = reverse(
+        "orders:order-detail",
+        args=[
+            0,
+        ],
+    )
+    assert url1 == f"/api/orders/order/0/"
+    response = api_client.patch(url1, data={"status": "accepted"})
+    assert response.status_code == status.HTTP_404_NOT_FOUND, response.content
+    assert response.json()["detail"] == "Order Does Not Exist"

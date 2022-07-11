@@ -84,7 +84,6 @@ class OrderSerializer(serializers.ModelSerializer):
         return order
 
     def update(self, instance, validated_data):
-        print("--------- update ---------")
         order = Order.objects.get(user=instance.user, order_number=instance)
         order.status = validated_data["status"]
         order.save()
