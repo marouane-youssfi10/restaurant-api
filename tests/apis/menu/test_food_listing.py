@@ -2,6 +2,7 @@ import pytest
 from django.urls import reverse
 from rest_framework import status
 
+from core_apps.core.menu.models import FoodGallery
 from tests.core.menu.factories import FoodGalleryFactory
 
 
@@ -23,3 +24,14 @@ def test_listing_food_by_name(api_client, user, food):
     assert response.json()["results"][0]["food_image"] == str("/mediafiles/") + str(
         food_image.food_images
     )
+    # check the image is none
+    FoodGallery.objects.all().delete()
+    FoodGalleryFactory.create(with_image=False)
+    api_client.force_authenticate(user)
+    url = reverse(
+        "menu:foods-list",
+    )
+    assert url == f"/api/menu/foods/"
+    response = api_client.get(url + str("?food_name="))
+    assert response.status_code == status.HTTP_200_OK, response.content
+    assert response.json()["results"][0]["food_image"] is None
