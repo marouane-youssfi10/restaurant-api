@@ -3,7 +3,6 @@ from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
 
-from core_apps.apis.payments.exceptions import OrderNumberDoesNotExist
 from core_apps.core.orders.models import Order
 from core_apps.core.payments.models import Payment
 
@@ -60,13 +59,6 @@ class PaymentSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 _(f"There's no Order for this user '{user}'")
             )
-
-        # check the order number if exist
-        order_number = self._order_number(attrs["user"])
-        if not Order.objects.filter(
-            user=attrs["user"], is_ordered=False, order_number=order_number
-        ).exists():
-            raise OrderNumberDoesNotExist
 
         return attrs
 

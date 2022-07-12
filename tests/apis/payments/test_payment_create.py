@@ -32,19 +32,20 @@ def test_payment_create(api_client, user):
     assert response.json()["status"] == "successful"
 
 
-# @pytest.mark.django_db
-# def test_payment_create_with_no_order(api_client, user):
-#     order1 = OrderFactory(user=user, order_number=1111)
-#     order2 = OrderFactory(user=user, order_number=2222)
-#     url = reverse("payments:payment-list")
-#     assert url == "/api/payments/payment/"
-#     api_client.force_authenticate(user)
-#     response = api_client.post(
-#         url,
-#         data={
-#             "user": order1.user.pkid,
-#             "method": "paypal",
-#             "amount_paid": 42.50,
-#             "status": "successful",
-#         },
-#     )
+@pytest.mark.django_db
+def test_payment_create_with_no_order(api_client, user):
+    url = reverse("payments:payment-list")
+    assert url == "/api/payments/payment/"
+    api_client.force_authenticate(user)
+    response = api_client.post(
+        url,
+        data={
+            "user": user.pkid,
+            "method": "paypal",
+            "amount_paid": 42.50,
+            "status": "successful",
+        },
+    )
+    no_order = ["There's no Order for this user '" + str(user) + "'"]
+    assert response.status_code == status.HTTP_400_BAD_REQUEST, response.content
+    assert response.json()["non_field_errors"] == no_order
