@@ -39,12 +39,12 @@ class PaymentSerializer(serializers.ModelSerializer):
         data = super().to_representation(instance)
         return data
 
-    def _order_number(self, user):
+    def _get_order_number(self, user):
         order = Order.objects.filter(user=user, is_ordered=False).latest("created_at")
         return order.order_number
 
-    def _order_total_user(self, user):
-        order_number = self._order_number(user)
+    def _get_order_total_user(self, user):
+        order_number = self._get_order_number(user)
         order = Order.objects.get(
             user=user, is_ordered=False, order_number=order_number
         )
@@ -64,7 +64,7 @@ class PaymentSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         # Store transaction details inside Payment model
-        amount_paid = self._order_total_user(validated_data["user"])
+        amount_paid = self._get_order_total_user(validated_data["user"])
         payment = Payment.objects.create(
             user=validated_data["user"],
             method=validated_data["method"],

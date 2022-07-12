@@ -1,5 +1,6 @@
 import logging
 
+from drf_yasg.utils import swagger_auto_schema
 from django.contrib.auth import get_user_model
 from rest_framework import mixins, viewsets, permissions
 
@@ -26,11 +27,32 @@ class CustomersView(
     renderer_classes = (CustomersJSONRenderer,)
     pagination_class = CustomersPagination
 
+    @swagger_auto_schema(
+        operation_summary="Retrieve Customer",
+        operation_description="""
+            Retrieve customer profile
+        """,
+        tags=["Profiles"],
+    )
     def retrieve(self, request, *args, **kwargs):
         return super().retrieve(request, *args, **kwargs)
 
+    @swagger_auto_schema(
+        operation_summary="Patch Customer",
+        operation_description="""
+            Patch customer profile
+        """,
+        tags=["Profiles"],
+    )
     def partial_update(self, request, *args, **kwargs):
         return super().partial_update(request, *args, **kwargs)
 
+    @swagger_auto_schema(
+        operation_summary="Update Customer",
+        operation_description="""
+            Update customer profile
+        """,
+        tags=["Profiles"],
+    )
     def update(self, request, *args, **kwargs):
         return super().update(request, *args, **kwargs)

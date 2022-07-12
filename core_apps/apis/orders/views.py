@@ -1,5 +1,6 @@
 import logging
 
+from drf_yasg.utils import swagger_auto_schema
 from django.contrib.auth import get_user_model
 from rest_framework import mixins, permissions, viewsets
 
@@ -17,7 +18,6 @@ class OrderView(
     mixins.ListModelMixin,
     mixins.CreateModelMixin,
     mixins.UpdateModelMixin,
-    mixins.DestroyModelMixin,
     viewsets.GenericViewSet,
 ):
     permission_classes = [permissions.IsAuthenticated]
@@ -38,14 +38,32 @@ class OrderView(
 
         raise NoStatusInParams
 
+    @swagger_auto_schema(
+        operation_summary="Create Order",
+        operation_description="""
+            Create order
+        """,
+        tags=["Orders"],
+    )
     def create(self, request, *args, **kwargs):
         return super().create(request, *args, **kwargs)
 
+    @swagger_auto_schema(
+        operation_summary="Patch Order",
+        operation_description="""
+            Patch order status
+        """,
+        tags=["Orders"],
+    )
     def partial_update(self, request, *args, **kwargs):
         return super().partial_update(request, *args, **kwargs)
 
-    def destroy(self, request, *args, **kwargs):
-        return super().destroy(request, *args, **kwargs)
-
+    @swagger_auto_schema(
+        operation_summary="List Order",
+        operation_description="""
+            List order bu status using /?status=
+        """,
+        tags=["Orders"],
+    )
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)

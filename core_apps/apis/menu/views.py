@@ -1,5 +1,6 @@
 import logging
 
+from drf_yasg.utils import swagger_auto_schema
 from django.contrib.auth import get_user_model
 from rest_framework import mixins, viewsets, permissions
 
@@ -22,6 +23,13 @@ class CategoryView(
     serializer_class = CategorySerializer
     queryset = Category.objects.all()
 
+    @swagger_auto_schema(
+        operation_summary="List Categories",
+        operation_description="""
+            List Categories
+        """,
+        tags=["Menu"],
+    )
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
 
@@ -40,6 +48,13 @@ class FoodView(mixins.ListModelMixin, viewsets.GenericViewSet):
         category = self.request.query_params.get("category_slug")
         return queryset.filter(category__slug=category)
 
+    @swagger_auto_schema(
+        operation_summary="List Food",
+        operation_description="""
+            List Food by category using /?category_slug= or by food name using /?food_name=
+        """,
+        tags=["Menu"],
+    )
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
 
@@ -64,11 +79,32 @@ class ReviewRatingView(
         food = self.request.query_params.get("by_food")
         return queryset.filter(food__slug=food)
 
+    @swagger_auto_schema(
+        operation_summary="patch review or rating",
+        operation_description="""
+            patch user review or rating on food post
+        """,
+        tags=["Menu"],
+    )
     def partial_update(self, request, *args, **kwargs):
         return super().update(request, *args, **kwargs)
 
+    @swagger_auto_schema(
+        operation_summary="Create review and rating",
+        operation_description="""
+            Create user review & rating on food post
+        """,
+        tags=["Menu"],
+    )
     def create(self, request, *args, **kwargs):
         return super().create(request, *args, **kwargs)
 
+    @swagger_auto_schema(
+        operation_summary="List ReviewRating",
+        operation_description="""
+            List review and rating by food name using /?by_food=
+        """,
+        tags=["Menu"],
+    )
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
