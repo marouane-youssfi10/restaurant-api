@@ -15,6 +15,7 @@ class OrderFactory(factory.django.DjangoModelFactory):
     city = factory.Faker("city")
     order_number = factory.LazyAttribute(lambda a: str(uuid.uuid4().__str__())[:8])
     order_total = factory.LazyAttribute(lambda a: round(randint(1, 100) + random(), 2))
+    status = Order.Statues.NEW
     is_ordered = True
 
     class Meta:
