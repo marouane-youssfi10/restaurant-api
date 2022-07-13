@@ -22,7 +22,7 @@ def test_order_admin_with_status_accepted__create(superuser, client):
         },
         follow=True,
     )
-    assert response.status_code == status.HTTP_200_OK
+    assert response.status_code == status.HTTP_403_FORBIDDEN
     response = client.get(f"/admin/orders/acceptedorder/{order.pkid}/change/")
     assert str(order.user.username), str(order.status) in str(response.content)
     assert str(order.status) in Order.Statues.ACCEPTED
@@ -45,7 +45,7 @@ def test_order_admin_with_status_completed__create(superuser, client):
         },
         follow=True,
     )
-    assert response.status_code == status.HTTP_200_OK
+    assert response.status_code == status.HTTP_403_FORBIDDEN
     response = client.get(f"/admin/orders/completedorder/{order.pkid}/change/")
     assert str(order.user.username), str(order.status) in str(response.content)
     assert str(order.status) in str(response.content), Order.Statues.COMPLETED
@@ -68,7 +68,7 @@ def test_order_admin_with_status_cancled__create(superuser, client):
         },
         follow=True,
     )
-    assert response.status_code == status.HTTP_200_OK
+    assert response.status_code == status.HTTP_403_FORBIDDEN
     response = client.get(f"/admin/orders/cancledorder/{order.pkid}/change/")
     assert str(order.user.username), str(order.status) in str(response.content)
     assert str(order.status) in str(response.content), Order.Statues.CANCLED

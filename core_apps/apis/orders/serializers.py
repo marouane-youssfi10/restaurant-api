@@ -6,7 +6,7 @@ from rest_framework import serializers
 from core_apps.apis.orders.exceptions import CartItemIsEmpty, HaveMoreOrders
 from core_apps.core.cart.models import Cart
 from core_apps.core.orders.models import Order
-from core_apps.core.orders.utils import generate_order_number
+from core_apps.utils.generators import generate_order_number
 
 logger = logging.getLogger(__name__)
 

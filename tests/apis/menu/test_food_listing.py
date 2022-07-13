@@ -39,6 +39,7 @@ def test_listing_food_by_name(api_client, user, food):
 
 @pytest.mark.django_db
 def test_listing_food_by_category(api_client, user, food):
+    api_client.force_authenticate(user)
     url = reverse(
         "menu:foods-list",
     )

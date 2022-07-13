@@ -8,7 +8,8 @@ from core_apps.core.orders.models import (
     OrderItem,
     CancledOrder,
 )
-from core_apps.core.orders.utils import order_ref_generator
+from core_apps.utils.admin import ReadOnlyWithDetailAdmin
+from core_apps.utils.generators import order_ref_generator
 
 
 class OrderInline(admin.TabularInline):
@@ -16,7 +17,7 @@ class OrderInline(admin.TabularInline):
     extra = 1
 
 
-class OrderAdmin(admin.ModelAdmin):
+class OrderAdmin(ReadOnlyWithDetailAdmin):
     list_display = [
         "pkid",
         "user_name",
@@ -52,7 +53,7 @@ class OrderAdmin(admin.ModelAdmin):
         )
 
 
-class AcceptedOrderAdmin(admin.ModelAdmin):
+class AcceptedOrderAdmin(ReadOnlyWithDetailAdmin):
     list_display = [
         "pkid",
         "user_name",
@@ -92,7 +93,7 @@ class AcceptedOrderAdmin(admin.ModelAdmin):
         )
 
 
-class CompletedOrderAdmin(admin.ModelAdmin):
+class CompletedOrderAdmin(ReadOnlyWithDetailAdmin):
     list_display = [
         "pkid",
         "user_name",
@@ -124,7 +125,7 @@ class CompletedOrderAdmin(admin.ModelAdmin):
         )
 
 
-class CancledOrderAdmin(admin.ModelAdmin):
+class CancledOrderAdmin(ReadOnlyWithDetailAdmin):
     list_display = [
         "pkid",
         "user_name",
@@ -156,7 +157,7 @@ class CancledOrderAdmin(admin.ModelAdmin):
         )
 
 
-class OrderItemAdmin(admin.ModelAdmin):
+class OrderItemAdmin(ReadOnlyWithDetailAdmin):
     list_display = [
         "pkid",
         "user_name",
