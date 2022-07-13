@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.utils.html import format_html
 
 from core_apps.core.menu.models import Category, Food, FoodGallery, ReviewRating
+from core_apps.utils.admin import ReadOnlyWithDetailAdmin
 
 
 class CategoryAdmin(admin.ModelAdmin):
@@ -45,7 +46,7 @@ class FoodGalleryAdmin(admin.ModelAdmin):
     thumbnail.short_description = "Food picture"
 
 
-class ReviewRatingAdmin(admin.ModelAdmin):
+class ReviewRatingAdmin(ReadOnlyWithDetailAdmin):
     list_display = [
         "pkid",
         "user",

@@ -1,9 +1,10 @@
 from django.contrib import admin
 
 from core_apps.core.payments.models import Payment
+from core_apps.utils.admin import ReadOnlyWithDetailAdmin
 
 
-class PaymentAdmin(admin.ModelAdmin):
+class PaymentAdmin(ReadOnlyWithDetailAdmin):
     list_display = [
         "id",
         "pkid",

@@ -1,7 +1,12 @@
 import pytest
 from django.contrib.admin import AdminSite
 
-from core_apps.core.menu.admin import CategoryAdmin, FoodAdmin, FoodGalleryAdmin
+from core_apps.core.menu.admin import (
+    CategoryAdmin,
+    FoodAdmin,
+    FoodGalleryAdmin,
+    ReviewRatingAdmin,
+)
 from core_apps.core.menu.models import Category, Food, FoodGallery, ReviewRating
 from tests.conftest import CustomRequest
 from tests.core.menu.factories import (
@@ -51,11 +56,11 @@ def test_food_gallery_admin__save_model(client):
 @pytest.mark.django_db
 def test_review_rating_admin__save_model(client):
     user = UserFactory(superuser=True)
-    review_rating = ReviewRatingFactory.create()
-    review_rating_admin = FoodGalleryAdmin(model=ReviewRating, admin_site=AdminSite())
+    review_rating = ReviewRatingFactory(user=user)
+    review_rating_admin = ReviewRatingAdmin(model=ReviewRating, admin_site=AdminSite())
     review_rating_admin.save_model(
         obj=review_rating, request=None, form=None, change=None
     )
-    assert review_rating_admin.has_add_permission(CustomRequest(user)) == True
-    assert review_rating_admin.has_change_permission(CustomRequest(user)) == True
-    assert review_rating_admin.has_delete_permission(CustomRequest(user)) == True
+    assert review_rating_admin.has_add_permission(CustomRequest(user)) == False
+    assert review_rating_admin.has_change_permission(CustomRequest(user)) == False
+    assert review_rating_admin.has_delete_permission(CustomRequest(user)) == False

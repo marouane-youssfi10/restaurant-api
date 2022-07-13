@@ -99,7 +99,6 @@ def test_order_items_admin__create(superuser, client, orderitem):
     )
     assert response.status_code == status.HTTP_403_FORBIDDEN
     response = client.get("/admin/orders/orderitem/")
-    # assert if any method in str(response.content) like (column-....)
     assert str(orderitem.user.username) in str(response.content)
 
 

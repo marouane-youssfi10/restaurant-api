@@ -15,9 +15,9 @@ def test_payment_admin__save_model(client):
     payment = PaymentFactory.create(user=user)
     payment_admin = PaymentAdmin(model=Payment, admin_site=AdminSite())
     payment_admin.save_model(obj=payment, request=None, form=None, change=None)
-    assert payment_admin.has_add_permission(CustomRequest(user)) == True
-    assert payment_admin.has_change_permission(CustomRequest(user)) == True
-    assert payment_admin.has_delete_permission(CustomRequest(user)) == True
+    assert payment_admin.has_add_permission(CustomRequest(user)) == False
+    assert payment_admin.has_change_permission(CustomRequest(user)) == False
+    assert payment_admin.has_delete_permission(CustomRequest(user)) == False
 
 
 @pytest.mark.django_db
@@ -34,9 +34,8 @@ def test_payment_admin__create(superuser, client):
         },
         follow=True,
     )
-    assert response.status_code == status.HTTP_200_OK
-    # response = client.get("/admin/payments/payment/")
-    # assert if any method in str(response.content) like (column-....)
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+    response = client.get("/admin/payments/payment/")
     assert str(payment.user.username) in str(response.content)
 
 
@@ -54,7 +53,7 @@ def test_payment_admin__change(superuser, client):
         },
         follow=True,
     )
-    assert response.status_code == status.HTTP_200_OK
+    assert response.status_code == status.HTTP_403_FORBIDDEN
 
 
 @pytest.mark.django_db
@@ -64,4 +63,4 @@ def test_payment_admin__delete(superuser, client):
     response = client.post(
         f"/admin/payments/payment/{payment.pkid}/delete/",
     )
-    assert response.status_code == status.HTTP_200_OK
+    assert response.status_code == status.HTTP_403_FORBIDDEN
