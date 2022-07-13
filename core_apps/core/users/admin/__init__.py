@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.db.models import Count
 from django.utils.translation import gettext_lazy as _
 
 from core_apps.core.users.admin.forms import UserChangeForm, UserCreationForm
@@ -7,21 +8,21 @@ from core_apps.core.users.models import User
 
 
 class UserAdmin(BaseUserAdmin):
-    ordering = ["email"]
+    ordering = ["-pkid"]
     add_form = UserCreationForm
     form = UserChangeForm
     model = User
     list_display = [
         "pkid",
-        "id",
         "email",
         "username",
         "first_name",
         "last_name",
+        "orders_count",
         "is_staff",
         "is_active",
     ]
-    list_display_links = ["id", "email"]
+    list_display_links = ["email"]
     list_filter = ["email", "username", "first_name", "last_name", "is_staff"]
     fieldsets = (
         (
@@ -56,6 +57,21 @@ class UserAdmin(BaseUserAdmin):
         ),
     )
     search_fields = ["email", "username", "first_name", "last_name"]
+
+    """def orders_count(self, obj):
+        return obj.user_order.filter(user=obj.pkid).count()"""
+
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request)
+        queryset = queryset.annotate(
+            _orders_count=Count("user_order", distinct=True),
+        ).order_by("-_orders_count")
+        return queryset
+
+    def orders_count(self, obj):
+        return obj._orders_count
+
+    orders_count.admin_order_field = "_orders_count"
 
 
 admin.site.register(User, UserAdmin)

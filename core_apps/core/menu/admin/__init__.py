@@ -48,15 +48,30 @@ class FoodGalleryAdmin(admin.ModelAdmin):
 class ReviewRatingAdmin(ReadOnlyWithDetailAdmin):
     list_display = [
         "pkid",
-        "user",
-        "food",
+        "user_name",
+        "food_name",
         "review",
         "rating",
         "created_at",
         "updated_at",
     ]
-    list_display_links = ["pkid", "user"]
-    search_fields = ["user"]
+    list_display_links = ["pkid"]
+    search_fields = ["user__username", "user__email"]
+
+    def user_name(self, obj: ReviewRating):
+        return format_html(
+            '<a href="/admin/users/user/?q={}">{} {}</a>',
+            obj.user.username,
+            obj.user.first_name,
+            obj.user.last_name,
+        )
+
+    def food_name(self, obj: ReviewRating):
+        return format_html(
+            '<a href="/admin/menu/food/{}/change">{}</a>',
+            obj.food.pkid,
+            obj.food.food_name,
+        )
 
 
 admin.site.register(Food, FoodAdmin)

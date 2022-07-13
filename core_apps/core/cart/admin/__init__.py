@@ -11,6 +11,7 @@ class CartAdmin(ReadOnlyWithDetailAdmin):
             None,
             {
                 "fields": (
+                    "id",
                     "pkid",
                     "user_name",
                     "food_name",

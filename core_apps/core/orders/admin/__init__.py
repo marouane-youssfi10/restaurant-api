@@ -39,6 +39,8 @@ class OrderMain(ReadOnlyWithDetailAdmin):
             _("Order info"),
             {
                 "fields": (
+                    "id",
+                    "pkid",
                     "order_number",
                     "address",
                     "order_total",
@@ -54,6 +56,8 @@ class OrderMain(ReadOnlyWithDetailAdmin):
     )
     search_fields = ["user__username", "user__email", "order_number"]
     readonly_fields = (
+        "id",
+        "pkid",
         "user_name",
         "user_payment",
         "order_number",
@@ -78,7 +82,6 @@ class OrderMain(ReadOnlyWithDetailAdmin):
         "user_status",
         "is_ordered",
         "created_at",
-        "updated_at",
     ]
     list_display_links = ["pkid", "order_number"]
 
@@ -242,7 +245,7 @@ class OrderItemAdmin(ReadOnlyWithDetailAdmin):
             '<a href="/admin/orders/{}order/{}/change">{}</a>',
             obj.order.status,
             obj.order.pkid,
-            obj.order,
+            obj.order.order_number,
         )
 
 
