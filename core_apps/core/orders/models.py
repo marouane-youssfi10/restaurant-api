@@ -67,7 +67,7 @@ class Order(TimeStampedUUIDModel):
     objects = OrderManager()
 
     def __str__(self):
-        return str(self.order_number)
+        return f"{self.user.username}'s " + str(self.order_number)
 
 
 class AcceptedOrder(Order):

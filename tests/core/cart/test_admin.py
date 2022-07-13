@@ -16,9 +16,9 @@ def test_cart_admin__save_model(client):
     cart = CartFactory.create(user=user)
     cart_admin = CartAdmin(model=Cart, admin_site=AdminSite())
     cart_admin.save_model(obj=cart, request=None, form=None, change=None)
-    assert cart_admin.has_add_permission(CustomRequest(user)) == True
-    assert cart_admin.has_change_permission(CustomRequest(user)) == True
-    assert cart_admin.has_delete_permission(CustomRequest(user)) == True
+    assert cart_admin.has_add_permission(CustomRequest(user)) == False
+    assert cart_admin.has_change_permission(CustomRequest(user)) == False
+    assert cart_admin.has_delete_permission(CustomRequest(user)) == False
 
 
 @pytest.mark.django_db
@@ -34,7 +34,7 @@ def test_cart_admin__create(superuser, client):
         },
         follow=True,
     )
-    assert response.status_code == status.HTTP_200_OK
+    assert response.status_code == status.HTTP_403_FORBIDDEN
     response = client.get("/admin/cart/cart/")
     assert str(cart.user.username) in str(response.content)
 
@@ -50,7 +50,7 @@ def test_cart_admin__change(superuser, client):
         {"user": cart.user, "food": cart.food, "quantity": cart.quantity},
         follow=True,
     )
-    assert response.status_code == status.HTTP_200_OK
+    assert response.status_code == status.HTTP_403_FORBIDDEN
 
 
 @pytest.mark.django_db
@@ -60,7 +60,7 @@ def test_cart_admin__delete(superuser, client):
     food = FoodFactory()
     cart = CartFactory(user=user, food=food)
     response = client.post(f"/admin/cart/cart/{cart.pkid}/delete/")
-    assert response.status_code == status.HTTP_200_OK
+    assert response.status_code == status.HTTP_403_FORBIDDEN
 
 
 @pytest.mark.django_db

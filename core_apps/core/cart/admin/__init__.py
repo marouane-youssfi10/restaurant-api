@@ -2,13 +2,32 @@ from django.contrib import admin
 from django.utils.html import format_html
 
 from core_apps.core.cart.models import Cart
+from core_apps.utils.admin import ReadOnlyWithDetailAdmin
 
 
-class CartAdmin(admin.ModelAdmin):
+class CartAdmin(ReadOnlyWithDetailAdmin):
+    fieldsets = (
+        (
+            None,
+            {
+                "fields": (
+                    "pkid",
+                    "user_name",
+                    "food_name",
+                    "food_price",
+                    "quantity",
+                    "sub_total",
+                    "created_at",
+                    "updated_at",
+                )
+            },
+        ),
+    )
     list_display = [
         "pkid",
         "user_name",
         "food_name",
+        "food_price",
         "quantity",
         "sub_total",
         "created_at",
@@ -32,6 +51,12 @@ class CartAdmin(admin.ModelAdmin):
             obj.food.pkid,
             obj.food.food_name,
         )
+
+    def sub_total(self, obj: Cart):
+        return str(obj.sub_total()) + str(" dh")
+
+    def food_price(self, obj: Cart):
+        return str(obj.food.price) + str(" dh")
 
 
 admin.site.register(Cart, CartAdmin)

@@ -1,3 +1,4 @@
+from django.utils.translation import gettext_lazy as _
 from django.contrib import admin
 from django.utils.html import format_html
 
@@ -14,10 +15,57 @@ from core_apps.utils.generators import generate_order_number
 
 class OrderInline(admin.TabularInline):
     model = OrderItem
-    extra = 1
+    extra = 0
+
+    readonly_fields = ("user", "payment", "food", "quantity", "food_price", "ordered")
+
+    def has_add_permission(self, request, obj=None):
+        return False
 
 
 class OrderMain(ReadOnlyWithDetailAdmin):
+    inlines = [OrderInline]
+    fieldsets = (
+        (
+            _("Details Order"),
+            {
+                "fields": (
+                    "user_name",
+                    "user_payment",
+                )
+            },
+        ),
+        (
+            _("Order info"),
+            {
+                "fields": (
+                    "order_number",
+                    "address",
+                    "order_total",
+                    "country",
+                    "city",
+                    "order_note",
+                    "is_ordered",
+                    "created_at",
+                    "updated_at",
+                )
+            },
+        ),
+    )
+    search_fields = ["user__username", "user__email", "order_number"]
+    readonly_fields = (
+        "user_name",
+        "user_payment",
+        "order_number",
+        "address",
+        "order_total",
+        "country",
+        "city",
+        "order_note",
+        "is_ordered",
+        "created_at",
+        "updated_at",
+    )
     list_display = [
         "pkid",
         "user_name",
@@ -33,19 +81,6 @@ class OrderMain(ReadOnlyWithDetailAdmin):
         "updated_at",
     ]
     list_display_links = ["pkid", "order_number"]
-    readonly_fields = (
-        "user",
-        "payment",
-        "order_number",
-        "address",
-        "order_total",
-        "country",
-        "city",
-        "order_note",
-        "is_ordered",
-    )
-    search_fields = ["user__username", "user__email"]
-    inlines = [OrderInline]
 
     def has_change_permission(self, request, obj=None):
         return True
@@ -134,10 +169,35 @@ class CancledOrderAdmin(OrderMain):
 
 
 class OrderItemAdmin(ReadOnlyWithDetailAdmin):
+    fieldsets = (
+        (
+            _("Details Order item"),
+            {
+                "fields": (
+                    "user_name",
+                    "order_number",
+                    "food",
+                    "payment",
+                )
+            },
+        ),
+        (
+            _("Order Item info"),
+            {
+                "fields": (
+                    "quantity",
+                    "food_price",
+                    "ordered",
+                    "created_at",
+                    "updated_at",
+                )
+            },
+        ),
+    )
     list_display = [
         "pkid",
         "user_name",
-        "order_id",
+        "order_number",
         "user_payment",
         "quantity",
         "food_price",
@@ -146,16 +206,17 @@ class OrderItemAdmin(ReadOnlyWithDetailAdmin):
     ]
     list_display_links = ["pkid"]
     list_filter = ["ordered"]
-    readonly_fields = (
-        "user",
+    readonly_fields = [
+        "user_name",
         "food",
-        "order",
+        "order_number",
         "payment",
         "quantity",
         "food_price",
         "created_at",
         "updated_at",
-    )
+    ]
+
     search_fields = ["user__username", "user__email"]
 
     def has_change_permission(self, request, obj=None) -> bool:
@@ -176,7 +237,7 @@ class OrderItemAdmin(ReadOnlyWithDetailAdmin):
             obj.payment,
         )
 
-    def order_id(self, obj: OrderItem):
+    def order_number(self, obj: OrderItem):
         return format_html(
             '<a href="/admin/orders/{}order/{}/change">{}</a>',
             obj.order.status,
