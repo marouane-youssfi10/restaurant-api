@@ -20,8 +20,8 @@ class OrderView(
     mixins.UpdateModelMixin,
     viewsets.GenericViewSet,
 ):
-    permission_classes = [permissions.IsAuthenticated]
     serializer_class = OrderSerializer
+    permission_classes = [permissions.IsAuthenticated]
     queryset = Order.objects.all()
 
     def get_object(self):

@@ -21,6 +21,7 @@ class CategoryView(
     mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet
 ):
     serializer_class = CategorySerializer
+    permission_classes = [permissions.IsAuthenticated]
     queryset = Category.objects.all()
 
     @swagger_auto_schema(
@@ -35,6 +36,7 @@ class CategoryView(
 
 
 class FoodView(mixins.ListModelMixin, viewsets.GenericViewSet):
+    permission_classes = [permissions.IsAuthenticated]
     serializer_class = FoodSerializer
     queryset = Food.objects.all()
     pagination_class = FoodsPagination

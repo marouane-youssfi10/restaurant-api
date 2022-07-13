@@ -21,8 +21,8 @@ class CustomersView(
     mixins.UpdateModelMixin,
     viewsets.GenericViewSet,
 ):
-    permission_classes = [permissions.IsAuthenticated]
     serializer_class = CustomersSerializer
+    permission_classes = [permissions.IsAuthenticated]
     queryset = Customer.objects.all()
     renderer_classes = (CustomersJSONRenderer,)
     pagination_class = CustomersPagination

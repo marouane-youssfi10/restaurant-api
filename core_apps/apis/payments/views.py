@@ -15,8 +15,8 @@ logger = logging.getLogger(__name__)
 class PaymentView(
     mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet
 ):
-    permission_classes = [permissions.IsAuthenticated]
     serializer_class = PaymentSerializer
+    permission_classes = [permissions.IsAuthenticated]
     queryset = Payment.objects.all()
 
     @swagger_auto_schema(

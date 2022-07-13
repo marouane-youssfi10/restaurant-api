@@ -19,8 +19,8 @@ class CartView(
     mixins.DestroyModelMixin,
     viewsets.GenericViewSet,
 ):
-    permission_classes = [permissions.IsAuthenticated]
     serializer_class = CartSerializer
+    permission_classes = [permissions.IsAuthenticated]
     queryset = Cart.objects.all()
 
     def get_queryset(self):
