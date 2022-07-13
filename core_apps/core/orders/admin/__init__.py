@@ -9,7 +9,7 @@ from core_apps.core.orders.models import (
     CancledOrder,
 )
 from core_apps.utils.admin import ReadOnlyWithDetailAdmin
-from core_apps.utils.generators import order_ref_generator
+from core_apps.utils.generators import generate_order_number
 
 
 class OrderInline(admin.TabularInline):
@@ -17,53 +17,7 @@ class OrderInline(admin.TabularInline):
     extra = 1
 
 
-class OrderAdmin(ReadOnlyWithDetailAdmin):
-    list_display = [
-        "pkid",
-        "user_name",
-        "payment",
-        "order_number",
-        "address",
-        "country",
-        "city",
-        "order_total",
-        "status",
-        "is_ordered",
-        "created_at",
-    ]
-    list_display_links = ["pkid", "order_number"]
-    search_fields = ["user__username", "user__email"]
-
-    class Meta:
-        model = Order
-
-    def get_queryset(self, request):
-        return Order.objects.all_new_orders()
-
-    def has_change_permission(self, request, obj=None):
-        return True
-
-    def save_model(self, request, obj, form, change):
-        obj.order_number = order_ref_generator()
-        super().save_model(request, obj, form, change)
-
-    def user_name(self, obj):
-        return format_html(
-            '<a href="/admin/users/user/?q={}">{} {}</a>',
-            obj.user.username,
-            obj.user.first_name,
-            obj.user.last_name,
-        )
-
-    def user_status(self, obj):
-        return format_html(
-            '<b class="button" style="background-color:#47CAC2;">{}</b>'.format(
-                obj.status
-            )
-        )
-
-
-class AcceptedOrderAdmin(ReadOnlyWithDetailAdmin):
+class OrderMain(ReadOnlyWithDetailAdmin):
     list_display = [
         "pkid",
         "user_name",
@@ -75,29 +29,28 @@ class AcceptedOrderAdmin(ReadOnlyWithDetailAdmin):
         "order_total",
         "user_status",
         "is_ordered",
+        "created_at",
         "updated_at",
     ]
     list_display_links = ["pkid", "order_number"]
+    readonly_fields = (
+        "user",
+        "payment",
+        "order_number",
+        "address",
+        "order_total",
+        "country",
+        "city",
+        "order_note",
+        "is_ordered",
+    )
     search_fields = ["user__username", "user__email"]
     inlines = [OrderInline]
-
-    class Meta:
-        model = AcceptedOrder
-
-    def get_queryset(self, request):
-        return AcceptedOrder.objects.all_order_accepted()
 
     def has_change_permission(self, request, obj=None):
         return True
 
-    def user_payment(self, obj):
-        return format_html(
-            '<a href="/admin/payments/payment/{}/change/">{}</a>',
-            obj.payment.pkid,
-            obj.payment,
-        )
-
-    def user_name(self, obj):
+    def user_name(self, obj: Order):
         return format_html(
             '<a href="/admin/users/user/?q={}">{} {}</a>',
             obj.user.username,
@@ -105,7 +58,44 @@ class AcceptedOrderAdmin(ReadOnlyWithDetailAdmin):
             obj.user.last_name,
         )
 
-    def user_status(self, obj):
+    def user_payment(self, obj: Order):
+        payment = "-"
+        if obj.payment:
+            return format_html(
+                '<a href="/admin/payments/payment/{}/change/">{}</a>',
+                obj.payment.pkid,
+                obj.payment,
+            )
+        return payment
+
+
+class OrderAdmin(OrderMain):
+    class Meta:
+        model = Order
+
+    def get_queryset(self, request):
+        return Order.objects.all_new_orders()
+
+    def save_model(self, request, obj, form, change):
+        obj.order_number = generate_order_number()
+        super().save_model(request, obj, form, change)
+
+    def user_status(self, obj: Order):
+        return format_html(
+            '<b class="button" style="background-color:#47CAC2;">{}</b>'.format(
+                obj.status
+            )
+        )
+
+
+class AcceptedOrderAdmin(OrderMain):
+    class Meta:
+        model = AcceptedOrder
+
+    def get_queryset(self, request):
+        return AcceptedOrder.objects.all_order_accepted()
+
+    def user_status(self, obj: AcceptedOrder):
         return format_html(
             '<b class="button" style="background-color:#70bf2c;">{}</b>'.format(
                 obj.status
@@ -113,41 +103,14 @@ class AcceptedOrderAdmin(ReadOnlyWithDetailAdmin):
         )
 
 
-class CompletedOrderAdmin(ReadOnlyWithDetailAdmin):
-    list_display = [
-        "pkid",
-        "user_name",
-        "order_number",
-        "address",
-        "country",
-        "city",
-        "order_total",
-        "user_status",
-        "is_ordered",
-        "updated_at",
-    ]
-    list_display_links = ["pkid", "order_number"]
-    search_fields = ["user__username", "user__email"]
-    inlines = [OrderInline]
-
+class CompletedOrderAdmin(OrderMain):
     class Meta:
         model = CompletedOrder
 
     def get_queryset(self, request):
         return CompletedOrder.objects.all_order_completed()
 
-    def has_change_permission(self, request, obj=None):
-        return True
-
-    def user_name(self, obj):
-        return format_html(
-            '<a href="/admin/users/user/?q={}">{} {}</a>',
-            obj.user.username,
-            obj.user.first_name,
-            obj.user.last_name,
-        )
-
-    def user_status(self, obj):
+    def user_status(self, obj: CompletedOrder):
         return format_html(
             '<b class="button" style="background-color:#46C0D9;">{}</b>'.format(
                 obj.status
@@ -155,41 +118,14 @@ class CompletedOrderAdmin(ReadOnlyWithDetailAdmin):
         )
 
 
-class CancledOrderAdmin(ReadOnlyWithDetailAdmin):
-    list_display = [
-        "pkid",
-        "user_name",
-        "order_number",
-        "address",
-        "country",
-        "city",
-        "order_total",
-        "user_status",
-        "is_ordered",
-        "updated_at",
-    ]
-    list_display_links = ["pkid", "order_number"]
-    search_fields = ["user__username", "user__email"]
-    inlines = [OrderInline]
-
+class CancledOrderAdmin(OrderMain):
     class Meta:
         model = CancledOrder
 
     def get_queryset(self, request):
         return CancledOrder.objects.all_order_cancled()
 
-    def has_change_permission(self, request, obj=None):
-        return True
-
-    def user_name(self, obj):
-        return format_html(
-            '<a href="/admin/users/user/?q={}">{} {}</a>',
-            obj.user.username,
-            obj.user.first_name,
-            obj.user.last_name,
-        )
-
-    def user_status(self, obj):
+    def user_status(self, obj: CancledOrder):
         return format_html(
             '<b class="button" style="background-color:#E15648;">{}</b>'.format(
                 obj.status
@@ -210,9 +146,22 @@ class OrderItemAdmin(ReadOnlyWithDetailAdmin):
     ]
     list_display_links = ["pkid"]
     list_filter = ["ordered"]
+    readonly_fields = (
+        "user",
+        "food",
+        "order",
+        "payment",
+        "quantity",
+        "food_price",
+        "created_at",
+        "updated_at",
+    )
     search_fields = ["user__username", "user__email"]
 
-    def user_name(self, obj):
+    def has_change_permission(self, request, obj=None) -> bool:
+        return True
+
+    def user_name(self, obj: OrderItem):
         return format_html(
             '<a href="/admin/users/user/?q={}">{} {}</a>',
             obj.user.username,
@@ -220,16 +169,17 @@ class OrderItemAdmin(ReadOnlyWithDetailAdmin):
             obj.user.last_name,
         )
 
-    def user_payment(self, obj):
+    def user_payment(self, obj: OrderItem):
         return format_html(
             '<a href="/admin/payments/payment/{}/change/">{}</a>',
             obj.payment.pkid,
             obj.payment,
         )
 
-    def order_id(self, obj):
+    def order_id(self, obj: OrderItem):
         return format_html(
-            '<a href="/admin/orders/completedorder/{}/change">{}</a>',
+            '<a href="/admin/orders/{}order/{}/change">{}</a>',
+            obj.order.status,
             obj.order.pkid,
             obj.order,
         )

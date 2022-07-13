@@ -14,3 +14,8 @@ class AlreadyRated(APIException):
 class OrderDoesNotExist(APIException):
     status_code = 404
     default_detail = "Order Does Not Exist"
+
+
+class FoodDoesNotExist(APIException):
+    status_code = 404
+    default_detail = "Food Does Not Exist"

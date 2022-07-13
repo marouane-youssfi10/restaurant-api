@@ -3,7 +3,11 @@ import logging
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import serializers
 
-from core_apps.apis.menu.exceptions import ReviewUserDoesNotExists, AlreadyRated
+from core_apps.apis.menu.exceptions import (
+    ReviewUserDoesNotExists,
+    AlreadyRated,
+    FoodDoesNotExist,
+)
 from core_apps.core.menu.models import Category, Food, FoodGallery, ReviewRating
 
 logger = logging.getLogger(__name__)
@@ -127,17 +131,24 @@ class ReviewRatingSerializer(serializers.ModelSerializer):
         return data
 
     def validate(self, attrs):
-        user = self.context["request"].user
         if "review" in attrs and "rating" in attrs and "food" in self.initial_data:
-            # check if the user Already Rated
+            food = self.initial_data["food"]
+            # check if food pkid is exists
+            if not Food.objects.filter(pkid=food).exists():
+                raise FoodDoesNotExist
+
+            # check if the user Already Rated on post food
             if (
-                ReviewRating.objects.filter(user=self.context["request"].user).count()
+                ReviewRating.objects.filter(
+                    user=self.context["request"].user, food=food
+                ).count()
                 >= 1
             ):
                 raise AlreadyRated
             return attrs
 
         # check this review user if exists
+        user = self.context["request"].user
         try:
             ReviewRating.objects.get(user__username=user)
         except ReviewRating.DoesNotExist:

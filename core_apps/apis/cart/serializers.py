@@ -32,7 +32,8 @@ class CartSerializer(serializers.ModelSerializer):
     def get_food_image(self, obj):
         if FoodGallery.objects.filter(food=obj.food).exists():
             food_gallery = FoodGallery.objects.get(food=obj.food)
-            return food_gallery.food_images.url
+            if food_gallery.food_images:
+                return food_gallery.food_images.url
         return None
 
     def get_food_price(self, obj):

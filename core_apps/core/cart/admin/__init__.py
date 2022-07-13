@@ -3,9 +3,6 @@ from django.utils.html import format_html
 
 from core_apps.core.cart.models import Cart
 
-# class FoodInline(admin.TabularInline):
-#     model = Food
-
 
 class CartAdmin(admin.ModelAdmin):
     list_display = [
@@ -20,10 +17,8 @@ class CartAdmin(admin.ModelAdmin):
     list_filter = ["created_at"]
     search_fields = ["user__username", "user__email"]
     list_editable = ["quantity"]
-    # raw_id_fields = ["user"]
-    # inlines=[FoodInline,]
 
-    def user_name(self, obj):
+    def user_name(self, obj: Cart):
         return format_html(
             '<a href="/admin/users/user/?q={}">{} {}</a>',
             obj.user.username,
@@ -31,7 +26,7 @@ class CartAdmin(admin.ModelAdmin):
             obj.user.last_name,
         )
 
-    def food_name(self, obj):
+    def food_name(self, obj: Cart):
         return format_html(
             '<a href="/admin/menu/food/{}/change">{}</a>',
             obj.food.pkid,

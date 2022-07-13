@@ -30,10 +30,9 @@ class FoodAdmin(admin.ModelAdmin):
 
 class FoodGalleryAdmin(admin.ModelAdmin):
     def thumbnail(self, obj):
-        try:
+        if obj.food_images:
             return format_html('<img src="{}" width="150">'.format(obj.food_images.url))
-        except:
-            pass
+        return "-"
 
     list_display = [
         "pkid",

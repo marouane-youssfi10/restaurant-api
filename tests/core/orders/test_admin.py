@@ -27,7 +27,7 @@ def test_order_items_admin__save_model(client):
     order_item_admin = OrderItemAdmin(model=OrderItem, admin_site=AdminSite())
     order_item_admin.save_model(obj=orderitem, request=None, form=None, change=None)
     assert order_item_admin.has_add_permission(CustomRequest(user)) == False
-    assert order_item_admin.has_change_permission(CustomRequest(user)) == False
+    assert order_item_admin.has_change_permission(CustomRequest(user)) == True
     assert order_item_admin.has_delete_permission(CustomRequest(user)) == False
 
 
@@ -119,7 +119,7 @@ def test_order_item_admin__change(superuser, client, orderitem):
         },
         follow=True,
     )
-    assert response.status_code == status.HTTP_403_FORBIDDEN
+    assert response.status_code == status.HTTP_200_OK
 
 
 @pytest.mark.django_db
