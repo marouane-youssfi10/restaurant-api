@@ -6,7 +6,6 @@ from core_apps.utils.admin import ReadOnlyWithDetailAdmin
 
 class PaymentAdmin(ReadOnlyWithDetailAdmin):
     list_display = [
-        "id",
         "pkid",
         "user",
         "method",
@@ -14,7 +13,7 @@ class PaymentAdmin(ReadOnlyWithDetailAdmin):
         "status",
         "created_at",
     ]
-    list_display_links = ["id", "pkid", "user"]
+    list_display_links = ["pkid", "user"]
     list_filter = ["method", "status"]
 
 
