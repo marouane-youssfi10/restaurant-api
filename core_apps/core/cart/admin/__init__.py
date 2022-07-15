@@ -1,8 +1,16 @@
 from django.contrib import admin
 from django.utils.html import format_html
+from dal_admin_filters import AutocompleteFilter
 
 from core_apps.core.cart.models import Cart
 from core_apps.utils.admin import ReadOnlyWithDetailAdmin
+
+
+class UserFilter(AutocompleteFilter):
+    title = "By user name"
+    field_name = "user"
+    autocomplete_url = "user-autocomplete"
+    is_placeholder_title = True
 
 
 class CartAdmin(ReadOnlyWithDetailAdmin):
@@ -34,7 +42,7 @@ class CartAdmin(ReadOnlyWithDetailAdmin):
         "created_at",
         "updated_at",
     ]
-    list_filter = ["created_at"]
+    list_filter = (UserFilter, "created_at")
     search_fields = ["user__username", "user__email"]
     list_editable = ["quantity"]
 

@@ -24,7 +24,7 @@ class CustomerAdmin(admin.ModelAdmin):
         "city",
     ]
     list_display_links = ["pkid"]
-    list_filter = (UserFilter,)
+    list_filter = (UserFilter, "city")
 
     def has_delete_permission(self, request, obj=None) -> bool:
         return False

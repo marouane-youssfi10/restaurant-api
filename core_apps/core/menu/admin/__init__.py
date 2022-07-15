@@ -1,8 +1,16 @@
 from django.contrib import admin
 from django.utils.html import format_html
+from dal_admin_filters import AutocompleteFilter
 
 from core_apps.core.menu.models import Category, Food, FoodGallery, ReviewRating
 from core_apps.utils.admin import ReadOnlyWithDetailAdmin
+
+
+class UserFilter(AutocompleteFilter):
+    title = "By user name"
+    field_name = "user"
+    autocomplete_url = "user-autocomplete"
+    is_placeholder_title = True
 
 
 class CategoryAdmin(admin.ModelAdmin):
@@ -56,7 +64,7 @@ class ReviewRatingAdmin(ReadOnlyWithDetailAdmin):
         "updated_at",
     ]
     list_display_links = ["pkid"]
-    search_fields = ["user__username", "user__email"]
+    search_fields = (UserFilter, "user__username", "user__email")
 
     def user_name(self, obj: ReviewRating):
         return format_html(

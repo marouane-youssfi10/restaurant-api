@@ -67,7 +67,7 @@ class Order(TimeStampedUUIDModel):
     objects = OrderManager()
 
     def __str__(self):
-        return f"{self.user.username}'s " + str(self.order_number)
+        return str(self.order_number)
 
 
 class AcceptedOrder(Order):
@@ -141,4 +141,4 @@ class OrderItem(TimeStampedUUIDModel):
     objects = OrderItemManager()
 
     def __str__(self):
-        return f"{self.user.username} - {self.order}"
+        return str(self.order)

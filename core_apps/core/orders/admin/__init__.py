@@ -1,6 +1,7 @@
 from django.utils.translation import gettext_lazy as _
 from django.contrib import admin
 from django.utils.html import format_html
+from dal_admin_filters import AutocompleteFilter
 
 from core_apps.core.orders.models import (
     Order,
@@ -11,6 +12,20 @@ from core_apps.core.orders.models import (
 )
 from core_apps.utils.admin import ReadOnlyWithDetailAdmin
 from core_apps.utils.generators import generate_order_number
+
+
+class UserFilter(AutocompleteFilter):
+    title = "By user name"
+    field_name = "user"
+    autocomplete_url = "user-autocomplete"
+    is_placeholder_title = True
+
+
+class OrderFilter(AutocompleteFilter):
+    title = "By order number"
+    field_name = "order"
+    autocomplete_url = "order-autocomplete"
+    is_placeholder_title = True
 
 
 class OrderInline(admin.TabularInline):
@@ -54,7 +69,7 @@ class OrderMain(ReadOnlyWithDetailAdmin):
             },
         ),
     )
-    search_fields = ["user__username", "user__email", "order_number"]
+    search_fields = (UserFilter, "user__username", "user__email", "order_number")
     readonly_fields = (
         "id",
         "pkid",
@@ -208,7 +223,7 @@ class OrderItemAdmin(ReadOnlyWithDetailAdmin):
         "created_at",
     ]
     list_display_links = ["pkid"]
-    list_filter = ["ordered"]
+    list_filter = (OrderFilter, UserFilter, "ordered")
     readonly_fields = [
         "user_name",
         "food",
@@ -220,7 +235,7 @@ class OrderItemAdmin(ReadOnlyWithDetailAdmin):
         "updated_at",
     ]
 
-    search_fields = ["user__username", "user__email"]
+    search_fields = ("user__username", "user__email")
 
     def has_change_permission(self, request, obj=None) -> bool:
         return True
