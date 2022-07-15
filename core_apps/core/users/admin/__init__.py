@@ -33,7 +33,15 @@ class UserAdmin(BaseUserAdmin):
         ),
         (
             _("Personal Information"),
-            {"fields": ("username", "first_name", "last_name", "profile_photo")},
+            {
+                "fields": (
+                    "username",
+                    "first_name",
+                    "last_name",
+                    "profile_photo",
+                    "display_picture",
+                )
+            },
         ),
         (
             _("Permissions and Groups"),
@@ -58,6 +66,7 @@ class UserAdmin(BaseUserAdmin):
             },
         ),
     )
+    readonly_fields = ("display_picture",)
     search_fields = ["email", "username", "first_name", "last_name"]
 
     def get_queryset(self, request):

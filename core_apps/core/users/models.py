@@ -1,6 +1,7 @@
 import uuid
 import typing
 
+from django.utils.html import format_html
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
 from django.utils import timezone
@@ -46,3 +47,11 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def get_short_name(self) -> typing.Text:
         return self.first_name
+
+    def display_picture(self):
+        html = '<img src="{}" width="170px;">'
+        if self.profile_photo:
+            return format_html(html, self.profile_photo.url)
+        return format_html("<strong>There is no picture for this user.<strong>")
+
+    display_picture.short_description = "Picture preview"
