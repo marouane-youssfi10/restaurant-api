@@ -23,12 +23,12 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
-    path("api/", include("core_apps.apis.users.urls", namespace="user")),
-    path("api/menu/", include("core_apps.apis.menu.urls", namespace="menu")),
-    path("api/carts/", include("core_apps.apis.cart.urls", namespace="cart")),
-    path("api/profiles/", include("core_apps.apis.profiles.urls", namespace="profile")),
-    path("api/orders/", include("core_apps.apis.orders.urls", namespace="order")),
-    path("api/payments/", include("core_apps.apis.payments.urls", namespace="payment")),
+    path("", include("core_apps.apis.users.urls", namespace="user")),
+    path("menu/", include("core_apps.apis.menu.urls", namespace="menu")),
+    path("carts/", include("core_apps.apis.cart.urls", namespace="cart")),
+    path("profiles/", include("core_apps.apis.profiles.urls", namespace="profile")),
+    path("orders/", include("core_apps.apis.orders.urls", namespace="order")),
+    path("payments/", include("core_apps.apis.payments.urls", namespace="payment")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
