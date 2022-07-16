@@ -66,6 +66,9 @@ class ReviewRatingAdmin(ReadOnlyWithDetailAdmin):
     list_display_links = ["pkid"]
     search_fields = (UserFilter, "user__username", "user__email")
 
+    def has_change_permission(self, request, obj=None):
+        return True
+
     def user_name(self, obj: ReviewRating):
         return format_html(
             '<a href="/admin/users/user/?q={}">{} {}</a>',

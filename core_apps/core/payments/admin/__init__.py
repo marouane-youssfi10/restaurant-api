@@ -26,6 +26,9 @@ class PaymentAdmin(ReadOnlyWithDetailAdmin):
     list_display_links = ["pkid"]
     list_filter = (UserFilter, "method", "status")
 
+    def has_change_permission(self, request, obj=None):
+        return True
+
     def user_name(self, obj: Payment):
         return format_html(
             '<a href="/admin/users/user/?q={}">{} {}</a>',
