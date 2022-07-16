@@ -69,7 +69,8 @@ class OrderMain(ReadOnlyWithDetailAdmin):
             },
         ),
     )
-    search_fields = (UserFilter, "user__username", "user__email", "order_number")
+    search_fields = ("user__username", "user__email", "order_number")
+    list_filter = (UserFilter, "order_number")
     readonly_fields = (
         "id",
         "pkid",
@@ -78,8 +79,6 @@ class OrderMain(ReadOnlyWithDetailAdmin):
         "order_number",
         "address",
         "order_total",
-        "country",
-        "city",
         "order_note",
         "is_ordered",
         "created_at",
@@ -217,8 +216,10 @@ class OrderItemAdmin(ReadOnlyWithDetailAdmin):
         "user_name",
         "order_number",
         "user_payment",
+        "food_name",
         "quantity",
         "food_price",
+        "sub_total",
         "ordered",
         "created_at",
     ]
@@ -235,7 +236,7 @@ class OrderItemAdmin(ReadOnlyWithDetailAdmin):
         "updated_at",
     ]
 
-    search_fields = ("user__username", "user__email")
+    search_fields = ("order__order_number", "user__username", "user__email")
 
     def has_change_permission(self, request, obj=None) -> bool:
         return True
@@ -262,6 +263,12 @@ class OrderItemAdmin(ReadOnlyWithDetailAdmin):
             obj.order.pkid,
             obj.order.order_number,
         )
+
+    def food_name(self, obj: OrderItem):
+        return obj.food.food_name
+
+    def sub_total(self, obj: OrderItem):
+        return obj.quantity * obj.food_price
 
 
 admin.site.register(Order, OrderAdmin)
