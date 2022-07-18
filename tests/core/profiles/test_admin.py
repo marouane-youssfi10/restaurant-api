@@ -14,6 +14,6 @@ def test_customer_admin__save_model(client, superuser):
     customer = CustomerFactory.create(user=superuser)
     customer_admin = CustomerAdmin(model=Customer, admin_site=AdminSite())
     customer_admin.save_model(obj=customer, request=None, form=None, change=None)
-    assert customer_admin.has_add_permission(CustomRequest(user)) == True
+    assert customer_admin.has_add_permission(CustomRequest(user)) == False
     assert customer_admin.has_change_permission(CustomRequest(user)) == True
     assert customer_admin.has_delete_permission(CustomRequest(user)) == False

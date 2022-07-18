@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.utils.html import format_html
 from dal_admin_filters import AutocompleteFilter
+from import_export.admin import ImportExportModelAdmin
 
 from core_apps.core.payments.models import Payment
 from core_apps.utils.admin import ReadOnlyWithDetailAdmin
@@ -13,7 +14,7 @@ class UserFilter(AutocompleteFilter):
     is_placeholder_title = True
 
 
-class PaymentAdmin(ReadOnlyWithDetailAdmin):
+class PaymentAdmin(ReadOnlyWithDetailAdmin, ImportExportModelAdmin):
     readonly_fields = ("created_at", "updated_at")
     list_display = [
         "pkid",

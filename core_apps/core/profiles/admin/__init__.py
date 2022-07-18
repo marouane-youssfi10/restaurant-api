@@ -2,8 +2,10 @@ from django.contrib import admin
 from django.utils.html import format_html
 
 from core_apps.core.profiles.models import Customer
+from core_apps.utils.admin import ReadOnlyWithDetailAdmin
 
 from dal_admin_filters import AutocompleteFilter
+from import_export.admin import ImportExportModelAdmin
 
 
 class UserFilter(AutocompleteFilter):
@@ -13,7 +15,7 @@ class UserFilter(AutocompleteFilter):
     is_placeholder_title = True
 
 
-class CustomerAdmin(admin.ModelAdmin):
+class CustomerAdmin(ReadOnlyWithDetailAdmin, ImportExportModelAdmin):
     list_display = [
         "pkid",
         "user_name",
@@ -26,8 +28,8 @@ class CustomerAdmin(admin.ModelAdmin):
     list_display_links = ["pkid"]
     list_filter = (UserFilter, "city")
 
-    def has_delete_permission(self, request, obj=None) -> bool:
-        return False
+    def has_change_permission(self, request, obj=None) -> bool:
+        return True
 
     def user_name(self, obj: Customer):
         return format_html(

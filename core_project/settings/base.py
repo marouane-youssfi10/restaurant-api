@@ -31,6 +31,7 @@ THIRD_PARTY_APPS = [
     "djcelery_email",
     "corsheaders",
     "drf_yasg",
+    "import_export",
 ]
 
 LOCAL_APPS = [

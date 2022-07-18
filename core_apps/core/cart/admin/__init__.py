@@ -14,24 +14,6 @@ class UserFilter(AutocompleteFilter):
 
 
 class CartAdmin(ReadOnlyWithDetailAdmin):
-    fieldsets = (
-        (
-            None,
-            {
-                "fields": (
-                    "id",
-                    "pkid",
-                    "user_name",
-                    "food_name",
-                    "food_price",
-                    "quantity",
-                    "sub_total",
-                    "created_at",
-                    "updated_at",
-                )
-            },
-        ),
-    )
     list_display = [
         "pkid",
         "user_name",
@@ -42,9 +24,22 @@ class CartAdmin(ReadOnlyWithDetailAdmin):
         "created_at",
         "updated_at",
     ]
+    readonly_fields = (
+        "pkid",
+        "id",
+        "user_name",
+        "food_name",
+        "food_price",
+        "sub_total",
+        "created_at",
+        "updated_at",
+    )
     list_filter = (UserFilter, "created_at")
     search_fields = ["user__username", "user__email"]
     list_editable = ["quantity"]
+
+    def has_change_permission(self, request, obj=None) -> bool:
+        return True
 
     def user_name(self, obj: Cart):
         return format_html(

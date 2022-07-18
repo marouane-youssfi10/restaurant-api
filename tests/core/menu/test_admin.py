@@ -62,5 +62,5 @@ def test_review_rating_admin__save_model(client):
         obj=review_rating, request=None, form=None, change=None
     )
     assert review_rating_admin.has_add_permission(CustomRequest(user)) == False
-    assert review_rating_admin.has_change_permission(CustomRequest(user)) == False
+    assert review_rating_admin.has_change_permission(CustomRequest(user)) == True
     assert review_rating_admin.has_delete_permission(CustomRequest(user)) == False
