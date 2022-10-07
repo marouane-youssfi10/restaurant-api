@@ -2,7 +2,28 @@
 A Detailed restaurant API built with Django, Docker,Celery,Redis, Nginx, Django Rest Framework and more...
 
 ### Setup Project
-Create *django-local.env* file to store the passwords
+
+The first thing to do is to clone the repository:
+
+```sh
+$ git clone https://github.com/marouane-youssfi10/restaurant-api.git
+$ cd restaurant-api
+```
+
+Create a virtual environment to install dependencies in and activate it:
+
+```sh
+$ python3 -m pip install virtualenv env
+$ source env/bin/activate
+```
+
+Then install the dependencies:
+
+```sh
+(env)$ pip install -r requirements.txt
+```
+
+Create *restaurant-api/django-local.env* file to store the passwords
 
 ```bash
 SIGNING_KEY=
