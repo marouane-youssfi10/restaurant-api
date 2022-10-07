@@ -20,7 +20,7 @@ $ source env/bin/activate
 Then install the dependencies:
 
 ```sh
-(env)$ pip install -r requirements.txt
+(env)$ pip install -r requirements/local.txt
 ```
 
 Create *restaurant-api/django-local.env* file to store the passwords
