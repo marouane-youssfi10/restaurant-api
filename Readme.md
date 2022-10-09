@@ -1,6 +1,9 @@
 # Restaurant API's
 A Detailed restaurant API built with Django, Docker,Celery,Redis, Nginx, Django Rest Framework and more...
 
+![Green Neon Hacking Tutorials YouTube Thumbnail](https://user-images.githubusercontent.com/74411397/194757348-e8d84a9a-05d3-4830-97e7-ea1b3b35f5b0.png)
+
+
 ### Implementation
 - Django REST Framework function-based views
 - Django REST Framework class-based views
