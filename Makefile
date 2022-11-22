@@ -62,7 +62,7 @@ test_report:
 	docker-compose -f local.yml run --rm api pytest -p no:warnings --cov=. --cov-report html
 
 test_with_printing_messages:
-	docker-compose -f local.yml run --rm api pytest -rP
+	docker-compose -f local.yml run --rm api pytest -v -rP
 
 clear_database:
 	docker-compose -f local.yml down --rmi all --volumes
